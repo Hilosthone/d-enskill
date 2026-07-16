@@ -26,7 +26,7 @@
 //       <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12'>
 //         {/* Branding */}
 //         <div className='col-span-1 md:col-span-2'>
-//           <h3 className='text-white text-2xl font-bold mb-4'>TechRocket</h3>
+//           <h3 className='text-white text-2xl font-bold mb-4'>D Enskill</h3>
 //           <p className='max-w-xs text-sm'>
 //             Equipping aspiring developers, designers, and innovators with
 //             practical, industry-ready digital skills.
@@ -82,7 +82,7 @@
 
 //       {/* Bottom Bar */}
 //       <div className='max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-800 text-center text-xs'>
-//         &copy; {new Date().getFullYear()} TechRocket. All rights reserved.
+//         &copy; {new Date().getFullYear()} D Enskill. All rights reserved.
 //       </div>
 //     </footer>
 //   )
@@ -105,8 +105,9 @@ export default function Footer() {
         {/* Branding */}
         <div className='col-span-1 md:col-span-2'>
           <h3 className='text-2xl font-bold mb-4'>
-            <span className='text-dark dark:text-white'>Tech</span>
-            <span className='text-primary-red'>Rocket</span>
+            <span className='text-dark dark:text-white'>D</span>
+            { ' ' }
+            <span className='text-primary-red'>Enskill</span>
           </h3>
           <p className='max-w-xs text-sm'>
             Equipping aspiring developers, designers, and innovators with
@@ -158,9 +159,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className='max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 text-center text-xs'>
-        <p>
-          &copy; {new Date().getFullYear()} TechRocket. All rights reserved.
-        </p>
+        <p>&copy; {new Date().getFullYear()} D Enskill. All rights reserved.</p>
       </div>
     </footer>
   )

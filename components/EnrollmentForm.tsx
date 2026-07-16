@@ -87,7 +87,7 @@ export default function EnrollmentForm({ title, subtitle }: FormProps) {
           <textarea
             required
             maxLength={500}
-            placeholder='Tell us why you are applying to TechRocket...'
+            placeholder='Tell us why you are applying to D Enskill...'
             className={`${inputClass} h-32`}
             onChange={(e) =>
               setFormData({ ...formData, reason: e.target.value })

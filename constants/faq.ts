@@ -6,7 +6,7 @@ export const FAQs = [
   },
   {
     q: 'Do you offer certificates?',
-    a: 'Yes, graduates receive an official TechRocket Certificate recognized by our industry partners upon completion.',
+    a: 'Yes, graduates receive an official D Enskill Certificate recognized by our industry partners upon completion.',
   },
   {
     q: 'Is the training fully remote?',

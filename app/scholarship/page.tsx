@@ -99,7 +99,7 @@ export default function ScholarshipPage() {
       {/* CTA */}
       <div className='text-center mt-20'>
         <button className='bg-dark dark:bg-white text-white dark:text-dark px-10 py-4 rounded-full font-bold hover:opacity-90 transition-opacity'>
-          Apply for TechRocket
+          Apply for D Enskill
         </button>
       </div>
     </main>

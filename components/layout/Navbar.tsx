@@ -151,7 +151,7 @@ export default function Navbar() {
         <Link href='/' className='flex items-center gap-2 group'>
           <FaRocket className='text-primary-red text-xl' />
           <span className='text-lg font-bold text-dark dark:text-white'>
-            Tech<span className='text-primary-red'>Rocket</span>
+            D {' '} <span className='text-primary-red'>Enskill</span>
           </span>
         </Link>
 

@@ -7,15 +7,16 @@ import LiveBackground from '@/components/LiveBackground'
 import Footer from '@/components/layout/Footer'
 
 export const metadata = {
-  title: 'TechRocket | Practical Tech Skills Institute',
-  description: 'Equipping aspiring developers with industry-ready digital skills.',
+  title: 'D Enskill | Practical Tech Skills Institute',
+  description:
+    'Equipping aspiring developers with industry-ready digital skills.',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="antialiased font-sans bg-white dark:bg-dark transition-colors duration-300">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <html lang='en' suppressHydrationWarning>
+      <body className='antialiased font-sans bg-white dark:bg-dark transition-colors duration-300'>
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <AosInit />
           <LiveBackground />
           <Navbar />

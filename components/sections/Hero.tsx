@@ -9,8 +9,8 @@ export default function Hero() {
         {`import React from 'react';
 import { createRoot } from 'react-dom/client';
 const root = createRoot(document.getElementById('root'));
-root.render(<h1>Building TechRocket...</h1>);
-console.log("Welcome to TechRocket - Practical Skill Institute.");
+root.render(<h1>Building D Enskill...</h1>);
+console.log("Welcome to D Enskill - Practical Skill Institute.");
 // Software Development, UI/UX, Data Science, AI...
 function techSkills(practial) { return practical * mentorship; }`}
       </div>

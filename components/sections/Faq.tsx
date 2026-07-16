@@ -7,7 +7,7 @@ const FAQs = [
   },
   {
     q: 'Do you offer certificates?',
-    a: 'Yes, we’re proud to celebrate your hard work! Upon completing your programme and final project, you will receive an official TechRocket Certificate.',
+    a: 'Yes, we’re proud to celebrate your hard work! Upon completing your programme and final project, you will receive an official D Enskill Certificate.',
   },
   {
     q: 'Is the training fully remote?',
@@ -15,7 +15,7 @@ const FAQs = [
   },
   {
     q: 'What is the duration of the programmes?',
-    a: 'Our courses are thoughtfully paced to help you master new skills, typically ranging from 12 to 24 weeks depending on the programme.',
+    a: 'Our courses are thoughtfully paced to help you master new skills, typically ranging from 11 to 22 weeks depending on the programme.',
   },
   {
     q: 'Do you provide job support?',
@@ -36,7 +36,7 @@ export default function Faq() {
       {/* Background Code Layer */}
       <div className='absolute inset-0 z-0 opacity-[0.15] dark:opacity-[0.4] pointer-events-none select-none overflow-hidden'>
         <pre className='font-mono text-[11px] leading-tight text-primary-blue [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]'>
-          {`// Your Journey at TechRocket
+          {`// Your Journey at D Enskill
 const welcomeStudent = (name) => {
   console.log("Welcome to the family, " + name + "!");
 }

@@ -53,16 +53,23 @@ export const PROGRAMMES = [
       'Lead digital products using Agile, Scrum, and effective roadmapping.',
   },
   {
-    title: 'Web3 Development',
-    duration: '11 Weeks',
-    price: '₦80,000',
+    title: 'Web3 and Blockchain Development',
+    duration: '22 Weeks',
+    price: '₦200,000',
     description:
       'Build decentralized applications (DApps) and Smart Contracts.',
   },
   {
     title: 'AI / Machine Learning',
-    duration: '11 Weeks',
-    price: '₦80,000',
+    duration: '22 Weeks',
+    price: '₦200,000',
     description: 'Learn Prompt Engineering, LLMs, and AI API integration.',
+  },
+  {
+    title: 'Graphics Design',
+    duration: '11 Weeks',
+    price: 'free',
+    description:
+      'Master Adobe Photoshop, Illustrator, and After Effects for stunning visuals.',
   },
 ]

@@ -94,6 +94,25 @@ const PROGRAMME_DATA = [
     career: ['Data Scientist'],
   },
   {
+    name: 'AI & Machine Learning',
+    duration: '22 Weeks',
+    price: '₦200,000',
+    topics: ['Python', 'TensorFlow', 'PyTorch', 'Deep Learning', 'NLP'],
+    projects: ['Image Recognition App', 'Chatbot'],
+    career: ['AI Engineer', 'ML Engineer'],
+  },
+  {
+    name: 'Web and Blockchain Development',
+    duration: '22 Weeks',
+    price: '₦200,000',
+    topics: [
+      'Solidity',
+      'Ethereum',
+    ],
+    projects: ['Decentralized App', 'Smart Contract'],
+    career: ['Blockchain Developer'],
+  },
+  {
     name: 'UI/UX Design',
     duration: '11 Weeks',
     price: '₦80,000',
