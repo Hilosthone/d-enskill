@@ -17,7 +17,7 @@ export default function Programmes() {
             <div
               key={i}
               // Added dark:border-gray-800 for better visibility in dark mode
-              className='bg-white dark:bg-dark p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-primary-blue transition'
+              className='bg-white dark:bg-dark p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-primary-purple transition'
               data-aos='fade-up'
             >
               {/* Explicitly set text colors for titles and paragraphs */}
@@ -25,7 +25,7 @@ export default function Programmes() {
                 {p.title}
               </h3>
 
-              <p className='text-primary-blue font-semibold mb-4'>
+              <p className='text-primary-purple font-semibold mb-4'>
                 {p.price} | {p.duration}
               </p>
 

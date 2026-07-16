@@ -22,8 +22,7 @@ export default function WhyChooseUs() {
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-16' data-aos='fade-up'>
           <h2 className='text-4xl md:text-5xl font-bold text-dark dark:text-white tracking-tight'>
-            Why Choose <span className='text-dark dark:text-white'>D</span>
-            { ' ' }
+            Why Choose <span className='text-dark dark:text-white'>D</span>{' '}
             <span className='text-primary-red'>Enskill</span> ???
           </h2>
           <p className='mt-4 text-lg text-dark/70 dark:text-white/70 max-w-2xl mx-auto'>
@@ -36,11 +35,11 @@ export default function WhyChooseUs() {
           {reasons.map((reason, index) => (
             <div
               key={reason.title}
-              className='bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-light dark:border-gray-800 shadow-sm flex items-start gap-6 hover:border-primary-blue/30 dark:hover:border-primary-blue/30 transition-all hover:-translate-y-1'
+              className='bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-light dark:border-gray-800 shadow-sm flex items-start gap-6 hover:border-primary-purple/30 dark:hover:border-primary-purple/30 transition-all hover:-translate-y-1'
               data-aos='fade-up'
               data-aos-delay={index * 100}
             >
-              <div className='p-3.5 bg-primary-blue/10 dark:bg-primary-blue/20 rounded-xl text-primary-blue text-2xl'>
+              <div className='p-3.5 bg-primary-purple/10 dark:bg-primary-purple/20 rounded-xl text-primary-purple text-2xl'>
                 <reason.icon />
               </div>
               <h3 className='text-xl font-semibold text-dark dark:text-white mt-1.5'>

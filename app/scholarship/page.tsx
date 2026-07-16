@@ -38,7 +38,9 @@ export default function ScholarshipPage() {
         </h1>
         <p className='text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto'>
           Every cohort, outstanding applicants can receive up to{' '}
-          <strong className='text-primary-blue'>90% tuition sponsorship</strong>{' '}
+          <strong className='text-primary-purple'>
+            90% tuition sponsorship
+          </strong>{' '}
           to accelerate their tech career.
         </p>
       </div>
@@ -54,11 +56,11 @@ export default function ScholarshipPage() {
               key={i}
               className='p-6 hover:border-primary-red rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm'
             >
-              <div className='bg-primary-blue/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4'>
+              <div className='bg-primary-purple/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4'>
                 {i === 0 ? (
-                  <Zap className='text-primary-blue' />
+                  <Zap className='text-primary-purple' />
                 ) : (
-                  <Award className='text-primary-blue' />
+                  <Award className='text-primary-purple' />
                 )}
               </div>
               <h3 className='font-bold text-lg mb-2 text-dark dark:text-white'>
@@ -81,7 +83,7 @@ export default function ScholarshipPage() {
           {STEPS.map((step, i) => (
             <div key={i} className='flex items-center gap-4'>
               <div className='flex flex-col items-center gap-2'>
-                <div className='w-12 h-12 rounded-full bg-primary-blue text-white flex items-center justify-center font-bold'>
+                <div className='w-12 h-12 rounded-full bg-primary-purple text-white flex items-center justify-center font-bold'>
                   {i + 1}
                 </div>
                 <span className='font-semibold text-dark dark:text-white text-sm'>

@@ -35,7 +35,7 @@ export default function Faq() {
     >
       {/* Background Code Layer */}
       <div className='absolute inset-0 z-0 opacity-[0.15] dark:opacity-[0.4] pointer-events-none select-none overflow-hidden'>
-        <pre className='font-mono text-[11px] leading-tight text-primary-blue [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]'>
+        <pre className='font-mono text-[11px] leading-tight text-primary-purple [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]'>
           {`// Your Journey at D Enskill
           const welcomeStudent = (name) => {
             console.log("Welcome to the family, " + name + "!");
@@ -63,7 +63,7 @@ export default function Faq() {
             key={i}
             data-aos='fade-up'
             data-aos-delay={i * 100}
-            className='group mb-4 p-5 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-blue transition-all duration-300'
+            className='group mb-4 p-5 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-purple transition-all duration-300'
           >
             <summary className='font-bold cursor-pointer text-dark dark:text-white outline-none flex justify-between items-center list-none'>
               {item.q}

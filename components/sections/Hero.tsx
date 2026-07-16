@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section className='relative overflow-hidden pt-24 pb-20 px-6'>
       {/* Background Animated Codes Overlay (Pure CSS effect) */}
-      <div className='absolute inset-0 -z-10 opacity-[0.03] dark:opacity-[0.05] font-mono text-[10px] text-primary-blue [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_90%)]'>
+      <div className='absolute inset-0 -z-10 opacity-[0.03] dark:opacity-[0.05] font-mono text-[10px] text-primary-purple [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_90%)]'>
         {`import React from 'react';
 import { createRoot } from 'react-dom/client';
 const root = createRoot(document.getElementById('root'));
@@ -17,7 +17,7 @@ function techSkills(practial) { return practical * mentorship; }`}
 
       <div className='max-w-5xl mx-auto text-center' data-aos='fade-up'>
         {/* Sleek Label */}
-        <div className='inline-flex items-center gap-2 bg-primary-blue/10 dark:bg-primary-blue/20 text-primary-blue px-4 py-1 rounded-full text-xs font-semibold mb-6 border border-primary-blue/20'>
+        <div className='inline-flex items-center gap-2 bg-primary-purple/10 dark:bg-primary-purple/20 text-primary-purple px-4 py-1 rounded-full text-xs font-semibold mb-6 border border-primary-purple/20'>
           <span className='relative flex h-2 w-2'>
             <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-red opacity-75'></span>
             <span className='relative inline-flex rounded-full h-2 w-2 bg-primary-red'></span>
@@ -27,7 +27,7 @@ function techSkills(practial) { return practical * mentorship; }`}
 
         {/* Main Headline */}
         <h1 className='text-5xl md:text-7xl font-extrabold tracking-tighter text-dark dark:text-white leading-[0.95]'>
-          Become a <span className='text-primary-blue'>Job-Ready</span>
+          Become a <span className='text-primary-purple'>Job-Ready</span>
           <br /> Tech Professional.
         </h1>
 

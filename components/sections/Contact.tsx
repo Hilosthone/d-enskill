@@ -1,5 +1,3 @@
-
-
 import { Mail, Phone } from 'lucide-react'
 
 export default function Contact() {
@@ -25,7 +23,7 @@ export default function Contact() {
             rel='noopener noreferrer'
             className='bg-gray-100 dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col items-center gap-4 hover:border-primary-red transition-all'
           >
-            <div className='p-3 bg-primary-blue/10 rounded-full text-primary-blue'>
+            <div className='p-3 bg-primary-purple/10 rounded-full text-primary-purple'>
               <Phone size={24} />
             </div>
             <h3 className='font-bold text-xl text-dark dark:text-white'>
@@ -41,7 +39,7 @@ export default function Contact() {
             href='mailto:info@diluxury.co.org'
             className='bg-gray-100 dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col items-center gap-4 hover:border-primary-red transition-all'
           >
-            <div className='p-3 bg-primary-blue/10 rounded-full text-primary-blue'>
+            <div className='p-3 bg-primary-purple/10 rounded-full text-primary-purple'>
               <Mail size={24} />
             </div>
             <h3 className='font-bold text-xl text-dark dark:text-white'>

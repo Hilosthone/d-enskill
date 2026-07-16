@@ -42,7 +42,7 @@
 //                 smooth={true}
 //                 duration={600}
 //                 offset={-80}
-//                 className='text-sm font-medium cursor-pointer text-dark/70 dark:text-white/70 hover:text-primary-blue transition-colors'
+//                 className='text-sm font-medium cursor-pointer text-dark/70 dark:text-white/70 hover:text-primary-purple transition-colors'
 //               >
 //                 {link.name}
 //               </ScrollLink>
@@ -98,7 +98,7 @@
 //               duration={600}
 //               offset={-80}
 //               onClick={() => setIsOpen(false)}
-//               className='text-3xl font-bold cursor-pointer hover:text-primary-blue transition-colors'
+//               className='text-3xl font-bold cursor-pointer hover:text-primary-purple transition-colors'
 //             >
 //               {link.name}
 //             </ScrollLink>
@@ -151,7 +151,7 @@ export default function Navbar() {
         <Link href='/' className='flex items-center gap-2 group'>
           <FaRocket className='text-primary-red text-xl' />
           <span className='text-lg font-bold text-dark dark:text-white'>
-            D {' '} <span className='text-primary-red'>Enskill</span>
+            D <span className='text-primary-red'>Enskill</span>
           </span>
         </Link>
 
@@ -161,7 +161,7 @@ export default function Navbar() {
             <button
               key={link.path}
               onClick={() => handleNavClick(link.path)}
-              className='text-sm font-medium cursor-pointer text-dark/70 dark:text-white/70 hover:text-primary-blue transition-colors'
+              className='text-sm font-extrabold cursor-pointer text-dark/70 dark:text-white/70 hover:text-primary-purple transition-colors'
             >
               {link.name}
             </button>
@@ -194,7 +194,7 @@ export default function Navbar() {
             <button
               key={link.path}
               onClick={() => handleNavClick(link.path)}
-              className='text-3xl font-bold text-dark dark:text-white hover:text-primary-blue transition-colors'
+              className='text-3xl font-bold text-dark font-extrabold dark:text-white hover:text-primary-purple transition-colors'
             >
               {link.name}
             </button>

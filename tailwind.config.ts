@@ -12,7 +12,7 @@ const config: Config = {
         // Add your custom colors here
         dark: '#1a1a1a',
         'primary-red': '#E11D48',
-        'primary-blue': '#2563EB',
+        'primary-purple': '#2563EB',
       },
     },
   },

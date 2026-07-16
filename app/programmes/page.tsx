@@ -105,10 +105,7 @@ const PROGRAMME_DATA = [
     name: 'Web and Blockchain Development',
     duration: '22 Weeks',
     price: '₦200,000',
-    topics: [
-      'Solidity',
-      'Ethereum',
-    ],
+    topics: ['Solidity', 'Ethereum'],
     projects: ['Decentralized App', 'Smart Contract'],
     career: ['Blockchain Developer'],
   },
@@ -135,7 +132,7 @@ function ProgrammeCard({ prog }: { prog: (typeof PROGRAMME_DATA)[0] }) {
           <h2 className='text-2xl font-bold text-dark dark:text-white'>
             {prog.name}
           </h2>
-          <p className='text-primary-blue font-semibold'>
+          <p className='text-primary-purple font-semibold'>
             {prog.duration} • {prog.price}
           </p>
         </div>
@@ -236,7 +233,7 @@ export default function ProgrammesPage() {
       <div className='grid md:grid-cols-2 gap-12 mb-24'>
         <div className='p-8 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900'>
           <h3 className='text-2xl font-bold mb-6 flex items-center gap-2 text-dark dark:text-white'>
-            <BookOpen className='text-primary-blue' /> Assessment Policy
+            <BookOpen className='text-primary-purple' /> Assessment Policy
           </h3>
           <p className='text-gray-600 dark:text-gray-300'>
             Students must score at least 70% in every standalone project to
@@ -261,7 +258,7 @@ export default function ProgrammesPage() {
               <li key={req} className='flex items-center gap-2'>
                 <CheckCircle2
                   size={18}
-                  className='text-primary-blue flex-shrink-0'
+                  className='text-primary-purple flex-shrink-0'
                 />{' '}
                 {req}
               </li>
@@ -273,13 +270,13 @@ export default function ProgrammesPage() {
       {/* Class Models */}
       <section className='text-center'>
         <h3 className='text-2xl font-bold mb-8 flex justify-center items-center gap-2 text-dark dark:text-white'>
-          <Calendar className='text-primary-blue' /> Flexible Learning Models
+          <Calendar className='text-primary-purple' /> Flexible Learning Models
         </h3>
         <div className='flex flex-wrap justify-center gap-4'>
           {['Online', 'Physical', 'Weekend', 'Recorded'].map((model) => (
             <span
               key={model}
-              className='bg-primary-blue/10 text-primary-blue px-6 py-3 rounded-full font-semibold'
+              className='bg-primary-purple/10 text-primary-purple px-6 py-3 rounded-full font-semibold'
             >
               {model} Classes
             </span>

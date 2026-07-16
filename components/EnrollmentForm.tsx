@@ -19,7 +19,7 @@ export default function EnrollmentForm({ title, subtitle }: FormProps) {
 
   // Reusable classes to keep the code clean and consistent
   const inputClass =
-    'w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-dark dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-blue transition-all'
+    'w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-dark dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-purple transition-all'
 
   return (
     <div className='bg-gray-50 dark:bg-gray-900/50 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm'>
@@ -100,7 +100,7 @@ export default function EnrollmentForm({ title, subtitle }: FormProps) {
 
         <button
           type='submit'
-          className='w-full bg-primary-blue text-white py-4 rounded-xl font-bold hover:bg-blue-800 transition-all transform hover:scale-[1.01]'
+          className='w-full bg-primary-purple text-white py-4 rounded-xl font-bold hover:bg-blue-800 transition-all transform hover:scale-[1.01]'
         >
           Submit Application
         </button>

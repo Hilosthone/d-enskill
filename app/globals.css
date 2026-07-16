@@ -1,13 +1,13 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @config "../tailwind.config.ts";
 @theme {
   /* Brand Colors */
-  --color-primary-red: #E50914;
-  --color-primary-blue: #1E40AF;
+  --color-primary-red: #e50914;
+  --color-primary-purple: #1e40af;
   --color-dark: #111827;
-  --color-success: #22C55E;
-  --color-warning: #F59E0B;
-  --color-gray-light: #F3F4F6;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-gray-light: #f3f4f6;
 
   /* System Defaults */
   --font-sans: ui-sans-serif, system-ui, sans-serif;
