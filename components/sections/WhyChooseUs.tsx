@@ -22,8 +22,9 @@ export default function WhyChooseUs() {
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-16' data-aos='fade-up'>
           <h2 className='text-4xl md:text-5xl font-bold text-dark dark:text-white tracking-tight'>
-            Why Choose <span className='text-dark dark:text-white'>Tech</span>
-            <span className='text-primary-red'>Rocket</span> ???
+            Why Choose <span className='text-dark dark:text-white'>D</span>
+            { ' ' }
+            <span className='text-primary-red'>Enskill</span> ???
           </h2>
           <p className='mt-4 text-lg text-dark/70 dark:text-white/70 max-w-2xl mx-auto'>
             Practical skills, professional support, and a pathway to a thriving

@@ -37,19 +37,19 @@ export default function Faq() {
       <div className='absolute inset-0 z-0 opacity-[0.15] dark:opacity-[0.4] pointer-events-none select-none overflow-hidden'>
         <pre className='font-mono text-[11px] leading-tight text-primary-blue [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]'>
           {`// Your Journey at D Enskill
-const welcomeStudent = (name) => {
-  console.log("Welcome to the family, " + name + "!");
-}
+          const welcomeStudent = (name) => {
+            console.log("Welcome to the family, " + name + "!");
+          }
 
-// We grow together
-const learnPracticalSkills = async () => {
-  return await Promise.all([mentorship, handsOnProjects, communitySupport]);
-}
+          // We grow together
+          const learnPracticalSkills = async () => {
+            return await Promise.all([mentorship, handsOnProjects, communitySupport]);
+          }
 
-// Building your future
-function achieveGoals(effort) {
-  return effort * passion;
-}`}
+          // Building your future
+          function achieveGoals(effort) {
+            return effort * passion;
+          }`}
         </pre>
       </div>
 
