@@ -1,25 +1,14 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 /* @config "../tailwind.config.ts"; */
 
 @theme {
   /* Brand Colors */
-  /* --color-primary-red: #E50914;
-  --color-primary-purplee: #1E40AF;
+  --color-primary-red: #D72638;
+  --color-primary-purple: #3A0CA3;
   --color-dark: #111827;
   --color-success: #22C55E;
   --color-warning: #F59E0B;
-  --color-gray-light: #F3F4F6; */
-
-  /* Brand Colors */
-  /* Primary Brand Colors */
-  --color-primary-red: #4300c9; /* Formerly primary-red, now Primary Purple */
-  --color-primary-purple: #3a0ca3; /* Formerly primary-purple, now Deep Purple */
-
-  /* Accent Colors */
-  --color-dark: #d72638; /* Formerly dark, now Red */
-  --color-success: #8a63ff; /* Formerly success, now Light Purple */
-  --color-warning: #f59e0b; /* Kept original */
-  --color-gray-light: #f3f4f6; /* Kept original */
+  --color-gray-light: #F3F4F6;
 
   /* System Defaults */
   --font-sans: ui-sans-serif, system-ui, sans-serif;
