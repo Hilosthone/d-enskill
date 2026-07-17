@@ -23,7 +23,7 @@ export const PROGRAMMES = [
   {
     title: 'Mobile Development',
     duration: '11 Weeks',
-    price: '₦80,000',
+    price: '₦100,000',
     description: 'Build native mobile apps using React Native and Expo.',
   },
   {
