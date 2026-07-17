@@ -80,7 +80,7 @@ const PROGRAMME_DATA = [
   {
     name: 'Mobile Development',
     duration: '11 Weeks',
-    price: '₦80,000',
+    price: '₦100,000',
     topics: ['React Native', 'Expo', 'Firebase', 'API Integration'],
     projects: ['Food App', 'Banking App', 'Chat App'],
     career: ['Mobile Dev'],
