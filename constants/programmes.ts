@@ -27,9 +27,16 @@ export const PROGRAMMES = [
     description: 'Build native mobile apps using React Native and Expo.',
   },
   {
+    title: 'Cybersecurity',
+    duration: '11 Weeks',
+    price: '₦100,000',
+    description:
+      'Learn network security, ethical hacking, and penetration testing.',
+  },
+  {
     title: 'Data Science',
     duration: '11 Weeks',
-    price: '₦80,000',
+    price: '₦80,000', //80,000
     description:
       'Unlock insights with Python, NumPy, Pandas, and Machine Learning.',
   },

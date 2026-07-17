@@ -86,6 +86,14 @@ const PROGRAMME_DATA = [
     career: ['Mobile Dev'],
   },
   {
+    name: 'Cybersecurity',
+    duration: '11 Weeks',
+    price: '₦100,000',
+    topics: ['Network Security', 'Ethical Hacking', 'Pen Testing', 'Cryptography'],
+    projects: ['Vulnerability Assessment', 'Pen Testing Report'],
+    career: ['Cybersecurity Analyst', 'Ethical Hacker'],
+  },
+  {
     name: 'Data Science',
     duration: '11 Weeks',
     price: '₦80,000',
