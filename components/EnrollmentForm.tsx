@@ -112,6 +112,9 @@
 'use client'
 import { useState, FormEvent } from 'react'
 
+// Assuming PROGRAMMES is imported or defined here
+import { PROGRAMMES } from '@/constants/programmes'
+
 interface FormProps {
   title: string
   subtitle: string
@@ -125,14 +128,14 @@ export default function EnrollmentForm({ title, subtitle }: FormProps) {
     country: '',
     phone: '',
     email: '',
+    course: '', // Added course field
     reason: '',
   })
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
 
-    // Format the message
-    const message = `Hello, I would like to apply to D Enskill.
+    const message = `Hello, I would like to apply for the ${formData.course} program at D Enskill.
     
 *Application Details:*
 Name: ${formData.firstName} ${formData.middleName} ${formData.lastName}
@@ -141,10 +144,7 @@ Phone: ${formData.phone}
 Email: ${formData.email}
 Reason for applying: ${formData.reason}`
 
-    // Encode the message and build the WhatsApp URL
     const whatsappUrl = `https://wa.me/2348134984001?text=${encodeURIComponent(message)}`
-
-    // Open WhatsApp in a new tab
     window.open(whatsappUrl, '_blank')
   }
 
@@ -158,8 +158,8 @@ Reason for applying: ${formData.reason}`
       </h2>
       <p className='text-gray-600 dark:text-gray-400 mb-8'>{subtitle}</p>
 
-      {/* Added onSubmit handler here */}
       <form className='space-y-5' onSubmit={handleSubmit}>
+        {/* Name fields */}
         <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
           <input
             required
@@ -189,6 +189,24 @@ Reason for applying: ${formData.reason}`
           />
         </div>
 
+        {/* Course Selection Dropdown */}
+        <select
+          required
+          className={inputClass}
+          value={formData.course}
+          onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+        >
+          <option value='' disabled>
+            Select a Program
+          </option>
+          {PROGRAMMES.map((prog) => (
+            <option key={prog.title} value={prog.title}>
+              {prog.title} ({prog.price})
+            </option>
+          ))}
+        </select>
+
+        {/* Other fields */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           <input
             required
@@ -224,7 +242,7 @@ Reason for applying: ${formData.reason}`
           <textarea
             required
             maxLength={500}
-            placeholder='Tell us why you are applying to D Enskill...'
+            placeholder='Tell us why you are applying...'
             className={`${inputClass} h-32`}
             value={formData.reason}
             onChange={(e) =>
