@@ -4,7 +4,7 @@
 @theme {
   /* Brand Colors */
   --color-primary-red: #D72638;
-  --color-primary-purple: #3A0CA3;
+  --color-primary-purple: #4818C4; /* CHANGE: Updated to a more vibrant purple from #3A0CA3 */
   --color-dark: #111827;
   --color-success: #22C55E;
   --color-warning: #F59E0B;
