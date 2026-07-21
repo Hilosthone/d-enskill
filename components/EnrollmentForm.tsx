@@ -1,5 +1,8 @@
 // 'use client'
-// import { useState } from 'react'
+// import { useState, FormEvent } from 'react'
+
+// // Assuming PROGRAMMES is imported or defined here
+// import { PROGRAMMES } from '@/constants/programmes'
 
 // interface FormProps {
 //   title: string
@@ -14,10 +17,26 @@
 //     country: '',
 //     phone: '',
 //     email: '',
+//     course: '', // Added course field
 //     reason: '',
 //   })
 
-//   // Reusable classes to keep the code clean and consistent
+//   const handleSubmit = (e: FormEvent) => {
+//     e.preventDefault()
+
+//     const message = `Hello, I would like to apply for the ${formData.course} program at D Enskill.
+
+// *Application Details:*
+// Name: ${formData.firstName} ${formData.middleName} ${formData.lastName}
+// Country: ${formData.country}
+// Phone: ${formData.phone}
+// Email: ${formData.email}
+// Reason for applying: ${formData.reason}`
+
+//     const whatsappUrl = `https://wa.me/2348134984001?text=${encodeURIComponent(message)}`
+//     window.open(whatsappUrl, '_blank')
+//   }
+
 //   const inputClass =
 //     'w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-dark dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-purple transition-all'
 
@@ -28,12 +47,14 @@
 //       </h2>
 //       <p className='text-gray-600 dark:text-gray-400 mb-8'>{subtitle}</p>
 
-//       <form className='space-y-5'>
+//       <form className='space-y-5' onSubmit={handleSubmit}>
+//         {/* Name fields */}
 //         <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
 //           <input
 //             required
 //             placeholder='First Name'
 //             className={inputClass}
+//             value={formData.firstName}
 //             onChange={(e) =>
 //               setFormData({ ...formData, firstName: e.target.value })
 //             }
@@ -41,6 +62,7 @@
 //           <input
 //             placeholder='Middle (Optional)'
 //             className={inputClass}
+//             value={formData.middleName}
 //             onChange={(e) =>
 //               setFormData({ ...formData, middleName: e.target.value })
 //             }
@@ -49,17 +71,37 @@
 //             required
 //             placeholder='Last Name'
 //             className={inputClass}
+//             value={formData.lastName}
 //             onChange={(e) =>
 //               setFormData({ ...formData, lastName: e.target.value })
 //             }
 //           />
 //         </div>
 
+//         {/* Course Selection Dropdown */}
+//         <select
+//           required
+//           className={inputClass}
+//           value={formData.course}
+//           onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+//         >
+//           <option value='' disabled>
+//             Select a Program
+//           </option>
+//           {PROGRAMMES.map((prog) => (
+//             <option key={prog.title} value={prog.title}>
+//               {prog.title} ({prog.price})
+//             </option>
+//           ))}
+//         </select>
+
+//         {/* Other fields */}
 //         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 //           <input
 //             required
 //             placeholder='Country'
 //             className={inputClass}
+//             value={formData.country}
 //             onChange={(e) =>
 //               setFormData({ ...formData, country: e.target.value })
 //             }
@@ -69,6 +111,7 @@
 //             type='tel'
 //             placeholder='Phone Number'
 //             className={inputClass}
+//             value={formData.phone}
 //             onChange={(e) =>
 //               setFormData({ ...formData, phone: e.target.value })
 //             }
@@ -80,6 +123,7 @@
 //           type='email'
 //           placeholder='Email Address'
 //           className={inputClass}
+//           value={formData.email}
 //           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
 //         />
 
@@ -87,8 +131,9 @@
 //           <textarea
 //             required
 //             maxLength={500}
-//             placeholder='Tell us why you are applying to D Enskill...'
+//             placeholder='Tell us why you are applying...'
 //             className={`${inputClass} h-32`}
+//             value={formData.reason}
 //             onChange={(e) =>
 //               setFormData({ ...formData, reason: e.target.value })
 //             }
@@ -111,8 +156,6 @@
 
 'use client'
 import { useState, FormEvent } from 'react'
-
-// Assuming PROGRAMMES is imported or defined here
 import { PROGRAMMES } from '@/constants/programmes'
 
 interface FormProps {
@@ -128,21 +171,30 @@ export default function EnrollmentForm({ title, subtitle }: FormProps) {
     country: '',
     phone: '',
     email: '',
-    course: '', // Added course field
+    course: '',
     reason: '',
+    agreedToCatalogue: false, // Added agreement state
   })
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
 
-    const message = `Hello, I would like to apply for the ${formData.course} program at D Enskill.
+    if (!formData.agreedToCatalogue) {
+      alert(
+        'Please confirm that you have read and agreed to the D Enskill Programme Catalogue.',
+      )
+      return
+    }
+
+    const message = `Hello D Enskill, I would like to apply for the ${formData.course} program at D Enskill.
     
 *Application Details:*
 Name: ${formData.firstName} ${formData.middleName} ${formData.lastName}
 Country: ${formData.country}
 Phone: ${formData.phone}
 Email: ${formData.email}
-Reason for applying: ${formData.reason}`
+Reason for applying: ${formData.reason}
+Agreed to Programme Catalogue: Yes`
 
     const whatsappUrl = `https://wa.me/2348134984001?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
@@ -254,9 +306,64 @@ Reason for applying: ${formData.reason}`
           </span>
         </div>
 
+        {/* Professional Catalogue Reader & Download Box */}
+        <div className='p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex flex-col md:flex-row items-center justify-between gap-4'>
+          <div className='text-sm text-gray-600 dark:text-gray-300'>
+            <p className='font-semibold text-dark dark:text-white'>
+              D Enskill Programme Catalogue
+            </p>
+            <p className='text-xs text-gray-500'>
+              Review our curriculum, schedules, and requirements before
+              applying.
+            </p>
+          </div>
+          <div className='flex items-center gap-3 w-full md:w-auto'>
+            <a
+              href='/D_ENSKILL_PROGRAMME.pdf'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='px-4 py-2 text-xs font-semibold rounded-lg border border-primary-purple text-primary-purple hover:bg-primary-purple/10 transition-all text-center'
+            >
+              Preview PDF
+            </a>
+            <a
+              href='/D_ENSKILL_PROGRAMME.pdf'
+              download='D_ENSKILL_PROGRAMME.pdf'
+              className='px-4 py-2 text-xs font-semibold rounded-lg bg-primary-purple text-white hover:opacity-90 transition-all text-center'
+            >
+              Download
+            </a>
+          </div>
+        </div>
+
+        {/* Terms Agreement Checkbox */}
+        <div className='flex items-start gap-3 pt-2'>
+          <input
+            type='checkbox'
+            id='catalogueAgreement'
+            required
+            className='mt-1 w-4 h-4 rounded border-gray-300 text-primary-purple focus:ring-primary-purple'
+            checked={formData.agreedToCatalogue}
+            onChange={(e) =>
+              setFormData({ ...formData, agreedToCatalogue: e.target.checked })
+            }
+          />
+          <label
+            htmlFor='catalogueAgreement'
+            className='text-sm text-gray-600 dark:text-gray-400 cursor-pointer'
+          >
+            I confirm that I have read, understood, and agreed to the guidelines
+            outlined in the{' '}
+            <span className='text-primary-purple font-medium'>
+              D Enskill Programme Catalogue
+            </span>
+            .
+          </label>
+        </div>
+
         <button
           type='submit'
-          className='w-full bg-primary-purple text-white py-4 rounded-xl font-bold hover:bg-blue-800 transition-all transform hover:scale-[1.01]'
+          className='w-full bg-primary-purple text-white py-4 rounded-xl font-bold hover:opacity-90 transition-all transform hover:scale-[1.01]'
         >
           Submit Application
         </button>
