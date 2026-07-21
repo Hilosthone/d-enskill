@@ -1,7 +1,5 @@
 // 'use client'
 // import { useState, FormEvent } from 'react'
-
-// // Assuming PROGRAMMES is imported or defined here
 // import { PROGRAMMES } from '@/constants/programmes'
 
 // interface FormProps {
@@ -17,21 +15,30 @@
 //     country: '',
 //     phone: '',
 //     email: '',
-//     course: '', // Added course field
+//     course: '',
 //     reason: '',
+//     agreedToCatalogue: false, // Added agreement state
 //   })
 
 //   const handleSubmit = (e: FormEvent) => {
 //     e.preventDefault()
 
-//     const message = `Hello, I would like to apply for the ${formData.course} program at D Enskill.
+//     if (!formData.agreedToCatalogue) {
+//       alert(
+//         'Please confirm that you have read and agreed to the D Enskill Programme Catalogue.',
+//       )
+//       return
+//     }
+
+//     const message = `Hello D Enskill, I would like to apply for the ${formData.course} program at D Enskill.
 
 // *Application Details:*
 // Name: ${formData.firstName} ${formData.middleName} ${formData.lastName}
 // Country: ${formData.country}
 // Phone: ${formData.phone}
 // Email: ${formData.email}
-// Reason for applying: ${formData.reason}`
+// Reason for applying: ${formData.reason}
+// Agreed to Programme Catalogue: Yes`
 
 //     const whatsappUrl = `https://wa.me/2348134984001?text=${encodeURIComponent(message)}`
 //     window.open(whatsappUrl, '_blank')
@@ -143,9 +150,64 @@
 //           </span>
 //         </div>
 
+//         {/* Professional Catalogue Reader & Download Box */}
+//         <div className='p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex flex-col md:flex-row items-center justify-between gap-4'>
+//           <div className='text-sm text-gray-600 dark:text-gray-300'>
+//             <p className='font-semibold text-dark dark:text-white'>
+//               D Enskill Programme Catalogue
+//             </p>
+//             <p className='text-xs text-gray-500'>
+//               Review our curriculum, schedules, and requirements before
+//               applying.
+//             </p>
+//           </div>
+//           <div className='flex items-center gap-3 w-full md:w-auto'>
+//             <a
+//               href='/D_ENSKILL_PROGRAMME.pdf'
+//               target='_blank'
+//               rel='noopener noreferrer'
+//               className='px-4 py-2 text-xs font-semibold rounded-lg border border-primary-purple text-primary-purple hover:bg-primary-purple/10 transition-all text-center'
+//             >
+//               Preview PDF
+//             </a>
+//             <a
+//               href='/D_ENSKILL_PROGRAMME.pdf'
+//               download='D_ENSKILL_PROGRAMME.pdf'
+//               className='px-4 py-2 text-xs font-semibold rounded-lg bg-primary-purple text-white hover:opacity-90 transition-all text-center'
+//             >
+//               Download
+//             </a>
+//           </div>
+//         </div>
+
+//         {/* Terms Agreement Checkbox */}
+//         <div className='flex items-start gap-3 pt-2'>
+//           <input
+//             type='checkbox'
+//             id='catalogueAgreement'
+//             required
+//             className='mt-1 w-4 h-4 rounded border-gray-300 text-primary-purple focus:ring-primary-purple'
+//             checked={formData.agreedToCatalogue}
+//             onChange={(e) =>
+//               setFormData({ ...formData, agreedToCatalogue: e.target.checked })
+//             }
+//           />
+//           <label
+//             htmlFor='catalogueAgreement'
+//             className='text-sm text-gray-600 dark:text-gray-400 cursor-pointer'
+//           >
+//             I confirm that I have read, understood, and agreed to the guidelines
+//             outlined in the{' '}
+//             <span className='text-primary-purple font-medium'>
+//               D Enskill Programme Catalogue
+//             </span>
+//             .
+//           </label>
+//         </div>
+
 //         <button
 //           type='submit'
-//           className='w-full bg-primary-purple text-white py-4 rounded-xl font-bold hover:bg-blue-800 transition-all transform hover:scale-[1.01]'
+//           className='w-full bg-primary-purple text-white py-4 rounded-xl font-bold hover:opacity-90 transition-all transform hover:scale-[1.01]'
 //         >
 //           Submit Application
 //         </button>
@@ -173,7 +235,8 @@ export default function EnrollmentForm({ title, subtitle }: FormProps) {
     email: '',
     course: '',
     reason: '',
-    agreedToCatalogue: false, // Added agreement state
+    referredBy: '', // Changed to handle custom referral names
+    agreedToCatalogue: false,
   })
 
   const handleSubmit = (e: FormEvent) => {
@@ -194,6 +257,7 @@ Country: ${formData.country}
 Phone: ${formData.phone}
 Email: ${formData.email}
 Reason for applying: ${formData.reason}
+Referred by: ${formData.referredBy || 'None'}
 Agreed to Programme Catalogue: Yes`
 
     const whatsappUrl = `https://wa.me/2348134984001?text=${encodeURIComponent(message)}`
@@ -288,6 +352,17 @@ Agreed to Programme Catalogue: Yes`
           className={inputClass}
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        />
+
+        {/* Referral Text Input */}
+        <input
+          type='text'
+          placeholder='Referred by (e.g. Growth Addict - Optional)'
+          className={inputClass}
+          value={formData.referredBy}
+          onChange={(e) =>
+            setFormData({ ...formData, referredBy: e.target.value })
+          }
         />
 
         <div className='relative'>
