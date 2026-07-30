@@ -1,3 +1,4 @@
+// src/app/admin/students/page.tsx
 'use client'
 import { useState, useEffect } from 'react'
 import {
@@ -16,8 +17,8 @@ import {
   GraduationCap,
 } from 'lucide-react'
 
-// Define the updated apiClient directly containing the endpoints to avoid any missing property errors!
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || 'https://denskill-backend.onrender.com'
 
 const getAuthHeaders = () => {
   const token =
@@ -39,7 +40,7 @@ const apiClient = {
     return res.json()
   },
 
-  updateStudentStatus: async (userId: string, status: 'active' | 'frozen') => {
+  updateStudentStatus: async (userId: string | number, status: 'active' | 'frozen') => {
     const res = await fetch(
       `${API_BASE_URL}/api/admin/students/${userId}/status`,
       {
@@ -51,7 +52,7 @@ const apiClient = {
     return res.json()
   },
 
-  deleteStudent: async (userId: string) => {
+  deleteStudent: async (userId: string | number) => {
     const res = await fetch(`${API_BASE_URL}/api/admin/students/${userId}`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
@@ -61,7 +62,7 @@ const apiClient = {
 }
 
 interface Student {
-  id: string
+  id: string | number
   name: string
   email: string
   phone?: string
@@ -81,6 +82,8 @@ export default function AdminStudentsPage() {
     setErrorMessage('')
     try {
       const response = await apiClient.getAdminStudents()
+      
+      // Extract array correctly from { status: 'success', students: [...] }
       const payload = response?.data || response
       const list = Array.isArray(payload)
         ? payload
@@ -88,11 +91,7 @@ export default function AdminStudentsPage() {
 
       setStudents(
         list.map((st: any) => ({
-          id: String(
-            st.id ||
-              st._id ||
-              `STU-${Math.floor(Math.random() * 90000 + 10000)}`,
-          ),
+          id: st.id ?? st._id ?? `STU-${Math.floor(Math.random() * 90000 + 10000)}`,
           name:
             st.name ||
             `${st.firstName || ''} ${st.lastName || ''}`.trim() ||
@@ -101,7 +100,7 @@ export default function AdminStudentsPage() {
           phone: st.phone || '+234 800 000 0000',
           course: st.course || st.program || 'Full-Stack Software Engineering',
           status: st.status === 'frozen' ? 'frozen' : 'active',
-          joinedDate: st.joinedDate || st.createdAt || 'Jul 2026',
+          joinedDate: st.created_at ? new Date(st.created_at).toLocaleDateString() : 'Jul 2026',
         })),
       )
     } catch (err: any) {
@@ -118,7 +117,7 @@ export default function AdminStudentsPage() {
   }, [])
 
   const handleToggleStatus = async (
-    id: string,
+    id: string | number,
     currentStatus: 'active' | 'frozen',
   ) => {
     const newStatus = currentStatus === 'active' ? 'frozen' : 'active'
@@ -132,7 +131,7 @@ export default function AdminStudentsPage() {
     }
   }
 
-  const handleDeleteStudent = async (id: string) => {
+  const handleDeleteStudent = async (id: string | number) => {
     if (
       confirm(
         'Are you sure you want to completely remove this student account?',

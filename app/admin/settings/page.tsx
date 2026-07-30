@@ -24,6 +24,7 @@ export default function AdminSettingsPage() {
   const [paystackKey, setPaystackKey] = useState('')
   const [supportEmail, setSupportEmail] = useState('')
   const [academyName, setAcademyName] = useState('')
+  const [maintenanceMode, setMaintenanceMode] = useState(false)
   const [sessionTimeout, setSessionTimeout] = useState('60')
   const [enable2FA, setEnable2FA] = useState(true)
   const [emailAlerts, setEmailAlerts] = useState(true)
@@ -33,42 +34,53 @@ export default function AdminSettingsPage() {
     setErrorMessage('')
     try {
       const response = await apiClient.getAdminSettings()
-      const data = response?.data || response || {}
+      const payload = response?.data || response || {}
+      const settings = payload?.settings || payload
 
+      setAcademyName(
+        settings.platform ||
+          settings.academyName ||
+          settings.name ||
+          localStorage.getItem('denskill_academy_name') ||
+          'D Enskill Academy',
+      )
+      setMaintenanceMode(
+        settings.maintenanceMode ??
+          localStorage.getItem('denskill_maintenance_mode') === 'true',
+      )
       setPaystackKey(
-        data.paystackKey ||
-          data.paystackSecretKey ||
+        settings.paystackKey ||
           localStorage.getItem('denskill_paystack_key') ||
           'sk_live_93748291048291048291048',
       )
       setSupportEmail(
-        data.supportEmail ||
+        settings.supportEmail ||
           localStorage.getItem('denskill_support_email') ||
           'support@denskill.org',
       )
-      setAcademyName(
-        data.academyName ||
-          data.name ||
-          localStorage.getItem('denskill_academy_name') ||
-          'D Enskill Academy Management System',
-      )
       setSessionTimeout(
         String(
-          data.sessionTimeout ||
+          settings.sessionTimeout ||
             localStorage.getItem('denskill_session_timeout') ||
             '60',
         ),
       )
       setEnable2FA(
-        data.enable2FA ?? localStorage.getItem('denskill_2fa') !== 'false',
+        settings.enable2FA ?? localStorage.getItem('denskill_2fa') !== 'false',
       )
       setEmailAlerts(
-        data.emailAlerts ??
+        settings.emailAlerts ??
           localStorage.getItem('denskill_email_alerts') !== 'false',
       )
     } catch (err: any) {
       setErrorMessage(
         err?.message || 'Failed to load system settings from backend.',
+      )
+      setAcademyName(
+        localStorage.getItem('denskill_academy_name') || 'D Enskill Academy',
+      )
+      setMaintenanceMode(
+        localStorage.getItem('denskill_maintenance_mode') === 'true',
       )
       setPaystackKey(
         localStorage.getItem('denskill_paystack_key') ||
@@ -77,10 +89,6 @@ export default function AdminSettingsPage() {
       setSupportEmail(
         localStorage.getItem('denskill_support_email') ||
           'support@denskill.org',
-      )
-      setAcademyName(
-        localStorage.getItem('denskill_academy_name') ||
-          'D Enskill Academy Management System',
       )
       setSessionTimeout(
         localStorage.getItem('denskill_session_timeout') || '60',
@@ -100,9 +108,13 @@ export default function AdminSettingsPage() {
     e.preventDefault()
 
     // Persist to localStorage as backup
+    localStorage.setItem('denskill_academy_name', academyName)
+    localStorage.setItem(
+      'denskill_maintenance_mode',
+      maintenanceMode.toString(),
+    )
     localStorage.setItem('denskill_paystack_key', paystackKey)
     localStorage.setItem('denskill_support_email', supportEmail)
-    localStorage.setItem('denskill_academy_name', academyName)
     localStorage.setItem('denskill_session_timeout', sessionTimeout)
     localStorage.setItem('denskill_2fa', enable2FA.toString())
     localStorage.setItem('denskill_email_alerts', emailAlerts.toString())
@@ -110,9 +122,10 @@ export default function AdminSettingsPage() {
     try {
       if (typeof (apiClient as any).updateAdminSettings === 'function') {
         await (apiClient as any).updateAdminSettings({
+          platform: academyName,
+          maintenanceMode,
           paystackKey,
           supportEmail,
-          academyName,
           sessionTimeout,
           enable2FA,
           emailAlerts,
@@ -135,8 +148,8 @@ export default function AdminSettingsPage() {
           Admin Portal Settings
         </h2>
         <p className='text-sm text-gray-500'>
-          Configure enterprise security parameters, payment gateway webhooks,
-          and academy-wide notifications.
+          Configure enterprise security parameters, gateway keys, and platform
+          maintenance status.
         </p>
       </div>
 
@@ -144,7 +157,7 @@ export default function AdminSettingsPage() {
         <div className='p-4 bg-green-500/10 border border-green-500/20 text-green-600 rounded-2xl flex items-center gap-3 text-sm font-medium animate-fadeIn'>
           <CheckCircle size={20} className='shrink-0' />
           <span>
-            System configurations and gateway parameters updated successfully!
+            System configurations and platform settings updated successfully!
           </span>
         </div>
       )}
@@ -171,7 +184,7 @@ export default function AdminSettingsPage() {
 
               <div>
                 <label className='block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5 uppercase tracking-wider'>
-                  Academy Display Name
+                  Platform Name
                 </label>
                 <input
                   type='text'
@@ -179,6 +192,24 @@ export default function AdminSettingsPage() {
                   onChange={(e) => setAcademyName(e.target.value)}
                   className={inputClass}
                   required
+                />
+              </div>
+
+              <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-950 rounded-xl border border-gray-200 dark:border-gray-800'>
+                <div>
+                  <p className='text-sm font-bold text-dark dark:text-white'>
+                    Maintenance Mode
+                  </p>
+                  <p className='text-xs text-gray-500'>
+                    Temporarily restrict user access while platform updates are
+                    deployed.
+                  </p>
+                </div>
+                <input
+                  type='checkbox'
+                  checked={maintenanceMode}
+                  onChange={(e) => setMaintenanceMode(e.target.checked)}
+                  className='w-5 h-5 accent-primary-purple cursor-pointer'
                 />
               </div>
 

@@ -1,3 +1,4 @@
+//src/app/admin/dashboard/page.tsx
 'use client'
 import { useState, useEffect } from 'react'
 import {
@@ -13,28 +14,29 @@ import { apiClient } from '@/services/api'
 
 interface DashboardStats {
   totalStudents: number
-  activeRevenue: number
+  totalRevenue: number
   activeCourses: number
   instructorsCount: number
 }
 
-interface Transaction {
+interface EnrollmentItem {
+  id: number
   name: string
   course: string
-  amount: string
-  status: string
-  time: string
+  amount_paid: string
+  payment_status: string
+  created_at: string
 }
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<DashboardStats>({
     totalStudents: 0,
-    activeRevenue: 0,
+    totalRevenue: 0,
     activeCourses: 0,
     instructorsCount: 0,
   })
 
-  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [enrollments, setEnrollments] = useState<EnrollmentItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -42,51 +44,32 @@ export default function AdminDashboardPage() {
     const fetchDashboardData = async () => {
       try {
         const response = await apiClient.getAdminDashboard()
-        // Handle standard axios response wrapper or direct data payload
+        // Extract payload from Axios wrapper or direct response
         const payload = response?.data || response
 
         if (payload) {
+          // Backend returns metrics nested inside payload.metrics
+          const metricsData = payload.metrics || {}
+
           setStats({
-            totalStudents: payload.totalStudents ?? payload.studentsCount ?? 0,
-            activeRevenue:
-              payload.activeRevenue ??
-              payload.totalRevenue ??
-              payload.revenue ??
-              0,
-            activeCourses: payload.activeCourses ?? payload.coursesCount ?? 0,
-            instructorsCount:
-              payload.instructorsCount ?? payload.mentorsCount ?? 0,
+            totalStudents:
+              metricsData.totalStudents ?? payload.totalStudents ?? 0,
+            totalRevenue: metricsData.totalRevenue ?? payload.totalRevenue ?? 0,
+            activeCourses:
+              metricsData.activeCourses ?? payload.activeCourses ?? 0,
+            instructorsCount: payload.instructorsCount ?? 0,
           })
 
+          // Backend returns recent enrollments under recentEnrollments
           const txList =
+            payload.recentEnrollments ||
             payload.recentTransactions ||
             payload.transactions ||
             payload.enrollments ||
             []
+
           if (Array.isArray(txList)) {
-            setTransactions(
-              txList.map((tx: any) => ({
-                name:
-                  tx.name ||
-                  `${tx.firstName || ''} ${tx.lastName || ''}`.trim() ||
-                  'Student',
-                course: tx.course || tx.program || 'Training Programme',
-                amount: tx.amount
-                  ? `₦${Number(tx.amount).toLocaleString()}`
-                  : tx.amountPaid
-                    ? `₦${Number(tx.amountPaid).toLocaleString()}`
-                    : '₦0',
-                status: tx.status || 'Successful',
-                time:
-                  tx.time ||
-                  (tx.createdAt
-                    ? new Date(tx.createdAt).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })
-                    : 'Recently'),
-              })),
-            )
+            setEnrollments(txList)
           }
         }
       } catch (err: any) {
@@ -102,13 +85,8 @@ export default function AdminDashboardPage() {
   }, [])
 
   const formattedRevenue = (() => {
-    const revNum =
-      typeof stats.activeRevenue === 'string'
-        ? parseInt(stats.activeRevenue, 10)
-        : stats.activeRevenue
-
-    if (isNaN(revNum)) return '₦0M'
-    return `₦${(revNum / 1000000).toFixed(1)}M`
+    const revNum = Number(stats.totalRevenue) || 0
+    return `₦${revNum.toLocaleString()}`
   })()
 
   if (isLoading) {
@@ -201,7 +179,7 @@ export default function AdminDashboardPage() {
       <div className='bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm space-y-4'>
         <div className='flex justify-between items-center'>
           <h3 className='text-lg font-bold text-dark dark:text-white'>
-            Recent Transactions
+            Recent Enrollments
           </h3>
           <span className='text-xs font-semibold text-primary-purple cursor-pointer hover:underline'>
             View All Payments
@@ -209,14 +187,14 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className='divide-y divide-gray-100 dark:divide-gray-800'>
-          {transactions.length === 0 ? (
+          {enrollments.length === 0 ? (
             <p className='py-6 text-center text-sm text-gray-400'>
-              No recent transactions recorded from backend yet.
+              No recent enrollments recorded from backend yet.
             </p>
           ) : (
-            transactions.map((tx, idx) => (
+            enrollments.map((tx) => (
               <div
-                key={idx}
+                key={tx.id}
                 className='py-3.5 flex items-center justify-between text-sm'
               >
                 <div className='space-y-0.5'>
@@ -227,10 +205,25 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className='text-right space-y-0.5'>
                   <p className='font-mono font-bold text-dark dark:text-white'>
-                    {tx.amount}
+                    ₦{Number(tx.amount_paid || 0).toLocaleString()}
                   </p>
-                  <p className='text-[10px] text-green-600 font-semibold'>
-                    {tx.status} • {tx.time}
+                  <p className='text-[10px] font-semibold flex items-center justify-end gap-1'>
+                    <span
+                      className={`px-1.5 py-0.5 rounded uppercase text-[9px] ${
+                        tx.payment_status === 'completed'
+                          ? 'bg-green-500/10 text-green-600'
+                          : 'bg-amber-500/10 text-amber-600'
+                      }`}
+                    >
+                      {tx.payment_status}
+                    </span>
+                    <span className='text-gray-400'>
+                      •{' '}
+                      {new Date(tx.created_at).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
                   </p>
                 </div>
               </div>
