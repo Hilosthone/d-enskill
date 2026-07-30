@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { apiClient } from '@/services/api'
 
 function VerifyContent() {
   const searchParams = useSearchParams()
@@ -13,27 +14,60 @@ function VerifyContent() {
     'verifying',
   )
   const [message, setMessage] = useState(
-    'Verifying your payment transaction...',
+    'Verifying your payment transaction with the server...',
   )
 
   useEffect(() => {
-    if (!reference) {
-      setStatus('error')
-      setMessage('No transaction reference found.')
-      return
+    let isMounted = true
+
+    async function verifyPayment() {
+      if (!reference) {
+        if (isMounted) {
+          setStatus('error')
+          setMessage('No transaction reference found.')
+        }
+        return
+      }
+
+      try {
+        // Call your actual backend endpoint method: verifyEnrollment
+        const response = await apiClient.verifyEnrollment(reference)
+
+        if (!isMounted) return
+
+        if (
+          response.error ||
+          response.statusCode >= 400 ||
+          response.success === false
+        ) {
+          throw new Error(
+            response.message || 'Payment verification failed on server.',
+          )
+        }
+
+        setStatus('success')
+        setMessage(
+          'Payment confirmed! Redirecting to complete your account setup...',
+        )
+        sessionStorage.setItem('paymentReference', reference)
+
+        const timer = setTimeout(() => {
+          router.push('/auth/create-account')
+        }, 1500)
+
+        return () => clearTimeout(timer)
+      } catch (err: any) {
+        if (!isMounted) return
+        setStatus('error')
+        setMessage(err.message || 'Could not verify payment transaction.')
+      }
     }
 
-    setStatus('success')
-    setMessage(
-      'Payment confirmed! Redirecting to complete your account setup...',
-    )
-    sessionStorage.setItem('paymentReference', reference)
+    verifyPayment()
 
-    const timer = setTimeout(() => {
-      router.push('/auth/create-account')
-    }, 1500)
-
-    return () => clearTimeout(timer)
+    return () => {
+      isMounted = false
+    }
   }, [reference, router])
 
   return (
