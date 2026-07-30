@@ -1,10 +1,13 @@
 @import "tailwindcss";
-/* @config "../tailwind.config.ts"; */
+@config "../tailwind.config.ts";
+
+/* ADD THIS LINE FOR TAILWIND V4 DARK MODE */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* Brand Colors */
   --color-primary-red: #D72638;
-  --color-primary-purple: #4818C4; /* CHANGE: Updated to a more vibrant purple from #3A0CA3 */
+  --color-primary-purple: #4818C4; 
   --color-dark: #111827;
   --color-success: #22C55E;
   --color-warning: #F59E0B;
@@ -19,7 +22,7 @@ body {
   @apply bg-white text-gray-900 font-sans transition-colors duration-300;
 }
 
-/* CHANGE: This now listens for the 'dark' class added by next-themes */
+/* Listens for the 'dark' class added by next-themes */
 .dark body {
   @apply bg-dark text-white;
 }
