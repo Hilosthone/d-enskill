@@ -241,6 +241,7 @@
 //   )
 // }
 
+//src
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -265,7 +266,7 @@ export default function CreateAccountPage() {
     const paid = sessionStorage.getItem('paymentCompleted')
     const data = sessionStorage.getItem('pendingRegistration')
     if (!paid || !data) {
-      router.push('/register')
+      router.push('/admission')
     } else {
       const parsedData = JSON.parse(data)
       setEmail(parsedData.email || '')
