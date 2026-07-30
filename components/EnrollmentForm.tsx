@@ -226,7 +226,16 @@ import { PROGRAMMES } from '@/constants/programmes'
 import { apiClient } from '@/services/api'
 import { Loader2 } from 'lucide-react'
 
-export default function RegisterPage() {
+// 1. Define props interface to handle title and subtitle from AdmissionPage
+interface EnrollmentFormProps {
+  title?: string
+  subtitle?: string
+}
+
+export default function EnrollmentForm({
+  title,
+  subtitle,
+}: EnrollmentFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -246,7 +255,6 @@ export default function RegisterPage() {
   const getCourseAmount = (courseTitle: string) => {
     const found = PROGRAMMES.find((p) => p.title === courseTitle)
     if (!found || !found.price) return 20000
-    // Remove non-digit characters (e.g., "₦", ",") and parse as integer
     const numeric = parseInt(found.price.replace(/[^0-9]/g, ''), 10)
     return isNaN(numeric) ? 20000 : numeric
   }
@@ -264,11 +272,9 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      // Determine amount from selected programme
       const amountPaid = getCourseAmount(formData.course)
       const callback_url = `${window.location.origin}/verify`
 
-      // Call backend initialization endpoint
       const response = await apiClient.initializeEnrollment({
         firstName: formData.firstName,
         middleName: formData.middleName || undefined,
@@ -283,10 +289,8 @@ export default function RegisterPage() {
         callback_url,
       })
 
-      // Store form data in session storage as backup for the verify/password step
       sessionStorage.setItem('pendingRegistration', JSON.stringify(formData))
 
-      // Check for Paystack authorization URL from backend response
       const checkoutUrl =
         response.authorization_url ||
         response.data?.authorization_url ||
@@ -295,7 +299,6 @@ export default function RegisterPage() {
       if (checkoutUrl) {
         window.location.href = checkoutUrl
       } else {
-        // Fallback if backend responds differently or redirects manually
         router.push('/payment')
       }
     } catch (err) {
@@ -313,11 +316,13 @@ export default function RegisterPage() {
   return (
     <div className='min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4'>
       <div className='max-w-2xl mx-auto bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm'>
+        {/* Render dynamic title and subtitle if passed */}
         <h2 className='text-2xl font-bold text-dark dark:text-white mb-2'>
-          Student Admission Registration
+          {title || 'Student Admission Registration'}
         </h2>
         <p className='text-gray-600 dark:text-gray-400 mb-8'>
-          Fill out your details to begin your application process.
+          {subtitle ||
+            'Fill out your details to begin your application process.'}
         </p>
 
         <form className='space-y-5' onSubmit={handleSubmit}>
