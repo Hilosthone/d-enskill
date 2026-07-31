@@ -38,12 +38,40 @@ export const apiClient = {
     return res.json()
   },
 
-  verifyEnrollment: async (reference: string) => {
+  payInstallment: async (payload: {
+    course: string
+    amountPayable: number
+    callback_url: string
+  }) => {
+    const res = await fetch(`${API_BASE_URL}/api/enrollments/pay-installment`, {
+      method: 'POST',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json',
+        accept: '*/*',
+      },
+      body: JSON.stringify(payload),
+    })
+    return res.json()
+  },
+
+  getInstallmentStatus: async (course: string) => {
     const res = await fetch(
-      `${API_BASE_URL}/api/enrollments/verify/${reference}`,
+      `${API_BASE_URL}/api/enrollments/installment-status/${encodeURIComponent(course)}`,
       {
         method: 'GET',
-        headers: { accept: '*/*' },
+        headers: { ...getAuthHeaders(), accept: '*/*' },
+      },
+    )
+    return res.json()
+  },
+
+  verifyEnrollment: async (reference: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/enrollments/verify/${encodeURIComponent(reference)}`,
+      {
+        method: 'GET',
+        headers: { ...getAuthHeaders(), accept: '*/*' },
       },
     )
     return res.json()
@@ -57,19 +85,6 @@ export const apiClient = {
     const res = await fetch(`${API_BASE_URL}/api/enrollments/set-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', accept: '*/*' },
-      body: JSON.stringify(payload),
-    })
-    return res.json()
-  },
-
-  payInstallment: async (payload: {
-    course: string
-    amountPayable: number
-    callback_url: string
-  }) => {
-    const res = await fetch(`${API_BASE_URL}/api/enrollments/pay-installment`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
       body: JSON.stringify(payload),
     })
     return res.json()
@@ -195,7 +210,7 @@ export const apiClient = {
 
     return data
   },
-  
+
   // --- 5. Admin Management ---
   getAdminDashboard: async () => {
     const res = await fetch(`${API_BASE_URL}/api/admin/dashboard`, {

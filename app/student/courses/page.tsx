@@ -94,8 +94,37 @@ export default function StudentCoursesPage() {
       )}
 
       {isLoading ? (
-        <div className='flex items-center justify-center py-16'>
-          <Loader2 className='w-6 h-6 animate-spin text-primary-purple' />
+        <div className='space-y-4 animate-pulse'>
+          {[1, 2].map((item) => (
+            <div
+              key={item}
+              className='p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-4 shadow-sm'
+            >
+              <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b pb-4 dark:border-gray-800'>
+                <div className='space-y-2'>
+                  <div className='h-3 w-28 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                  <div className='h-6 w-56 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                  <div className='h-3 w-40 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                </div>
+                <div className='h-6 w-24 bg-gray-200 dark:bg-gray-800 rounded-full'></div>
+              </div>
+
+              <div className='h-4 w-full bg-gray-200 dark:bg-gray-800 rounded'></div>
+
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 pt-2'>
+                {[1, 2].map((card) => (
+                  <div
+                    key={card}
+                    className='p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 space-y-2'
+                  >
+                    <div className='h-3 w-24 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                    <div className='h-5 w-48 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                    <div className='h-3 w-32 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       ) : courses.length === 0 ? (
         <div className='p-8 text-center bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 text-gray-500 text-xs'>

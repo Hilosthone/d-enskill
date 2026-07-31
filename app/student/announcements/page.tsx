@@ -1,73 +1,3 @@
-// 'use client'
-// import { useState, useEffect } from 'react'
-// import { useRouter } from 'next/navigation'
-// import { Bell, Calendar } from 'lucide-react'
-
-// export default function StudentAnnouncementsPage() {
-//   const router = useRouter()
-
-//   useEffect(() => {
-//     const loggedIn = sessionStorage.getItem('isLoggedIn')
-//     if (!loggedIn) router.push('/auth/login')
-//   }, [router])
-
-//   const announcements = [
-//     {
-//       title: 'Live Q&A Session with Lead Instructor',
-//       date: 'July 30, 2026',
-//       content:
-//         'Join us this Thursday at 6:00 PM WAT for our live architectural review covering Next.js App Router caching strategies.',
-//       tag: 'Live Session',
-//     },
-//     {
-//       title: 'New Assignment Guidelines Released',
-//       date: 'July 25, 2026',
-//       content:
-//         'The specifications for your milestone component project have been updated in the resource directory. Please check your submission deadline.',
-//       tag: 'Assignment',
-//     },
-//   ]
-
-//   return (
-//     <div className='p-6 md:p-12 space-y-6 max-w-5xl mx-auto'>
-//       <div>
-//         <h1 className='text-2xl font-bold text-dark dark:text-white'>
-//           Academy Announcements
-//         </h1>
-//         <p className='text-xs text-gray-500 mt-1'>
-//           Stay up to date with direct bulletins from the academy directors.
-//         </p>
-//       </div>
-
-//       <div className='space-y-4'>
-//         {announcements.map((item, idx) => (
-//           <div
-//             key={idx}
-//             className='p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-3'
-//           >
-//             <div className='flex items-center justify-between'>
-//               <span className='px-3 py-1 bg-primary-purple/10 text-primary-purple text-xs font-bold rounded-full'>
-//                 {item.tag}
-//               </span>
-//               <span className='text-xs text-gray-400 flex items-center gap-1'>
-//                 <Calendar size={14} /> {item.date}
-//               </span>
-//             </div>
-//             <h3 className='font-bold text-dark dark:text-white text-lg'>
-//               {item.title}
-//             </h3>
-//             <p className='text-xs text-gray-600 dark:text-gray-300 leading-relaxed'>
-//               {item.content}
-//             </p>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   )
-// }
-
-
-
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -140,8 +70,23 @@ export default function StudentAnnouncementsPage() {
       )}
 
       {isLoading ? (
-        <div className='flex items-center justify-center py-16'>
-          <Loader2 className='w-6 h-6 animate-spin text-primary-purple' />
+        <div className='space-y-4 animate-pulse'>
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className='p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-3 shadow-sm'
+            >
+              <div className='flex items-center justify-between'>
+                <div className='h-6 w-20 bg-gray-200 dark:bg-gray-800 rounded-full'></div>
+                <div className='h-4 w-24 bg-gray-200 dark:bg-gray-800 rounded'></div>
+              </div>
+              <div className='h-6 w-3/4 bg-gray-200 dark:bg-gray-800 rounded'></div>
+              <div className='space-y-2 pt-1'>
+                <div className='h-3 w-full bg-gray-200 dark:bg-gray-800 rounded'></div>
+                <div className='h-3 w-5/6 bg-gray-200 dark:bg-gray-800 rounded'></div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : announcements.length === 0 ? (
         <div className='p-8 text-center bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 text-gray-500 text-xs'>

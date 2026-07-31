@@ -97,8 +97,63 @@ export default function StudentProfilePage() {
 
   if (isLoading) {
     return (
-      <div className='h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center'>
-        <Loader2 className='w-6 h-6 animate-spin text-primary-purple' />
+      <div className='p-6 md:p-12 space-y-6 max-w-3xl mx-auto animate-pulse'>
+        {/* Header Skeleton */}
+        <div className='flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-4'>
+          <div className='space-y-2'>
+            <div className='h-8 w-48 bg-gray-200 dark:bg-gray-800 rounded-lg'></div>
+            <div className='h-3 w-72 bg-gray-200 dark:bg-gray-800 rounded'></div>
+          </div>
+          <div className='hidden sm:block h-8 w-32 bg-gray-200 dark:bg-gray-800 rounded-full'></div>
+        </div>
+
+        {/* Form Skeleton Card */}
+        <div className='bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-5 shadow-sm'>
+          {/* Row 1: Names */}
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className='space-y-1.5'>
+                <div className='h-3 w-20 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                <div className='h-11 w-full bg-gray-200 dark:bg-gray-800 rounded-xl'></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Row 2: Email */}
+          <div className='space-y-1.5'>
+            <div className='h-3 w-28 bg-gray-200 dark:bg-gray-800 rounded'></div>
+            <div className='h-11 w-full bg-gray-200 dark:bg-gray-800 rounded-xl'></div>
+          </div>
+
+          {/* Row 3: Phone & Country */}
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+            {[1, 2].map((i) => (
+              <div key={i} className='space-y-1.5'>
+                <div className='h-3 w-24 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                <div className='h-11 w-full bg-gray-200 dark:bg-gray-800 rounded-xl'></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Row 4: Referral & Member Since */}
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+            {[1, 2].map((i) => (
+              <div key={i} className='space-y-1.5'>
+                <div className='h-3 w-24 bg-gray-200 dark:bg-gray-800 rounded'></div>
+                <div className='h-11 w-full bg-gray-200 dark:bg-gray-800 rounded-xl'></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Row 5: Textarea Goal */}
+          <div className='space-y-1.5'>
+            <div className='h-3 w-32 bg-gray-200 dark:bg-gray-800 rounded'></div>
+            <div className='h-24 w-full bg-gray-200 dark:bg-gray-800 rounded-xl'></div>
+          </div>
+
+          {/* Submit Button Skeleton */}
+          <div className='h-11 w-full bg-gray-200 dark:bg-gray-800 rounded-xl'></div>
+        </div>
       </div>
     )
   }
