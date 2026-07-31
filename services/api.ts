@@ -355,4 +355,27 @@ export const apiClient = {
     })
     return res.json()
   },
+  manualOnboardStudent: async (payload: {
+    firstName: string
+    middleName?: string
+    lastName: string
+    country?: string
+    phone?: string
+    email: string
+    course: string
+    amountPaid: number
+    password?: string
+    referredBy?: string
+    reason?: string
+  }) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/enrollments/manual-onboard`,
+      {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      },
+    )
+    return res.json()
+  },
 }

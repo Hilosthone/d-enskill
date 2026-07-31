@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
   Users,
+  UserPlus,
   CreditCard,
   BookOpen,
   Bell,
@@ -17,6 +18,7 @@ import {
 const adminNavItems = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { label: 'Students', href: '/admin/students', icon: Users },
+  { label: 'Manual Onboard', href: '/admin/manual-onboard', icon: UserPlus },
   { label: 'Payments', href: '/admin/payments', icon: CreditCard },
   { label: 'Courses', href: '/admin/courses', icon: BookOpen },
   { label: 'Announcements', href: '/admin/announcements', icon: Bell },
