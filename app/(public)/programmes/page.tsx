@@ -125,6 +125,14 @@ const PROGRAMME_DATA = [
     projects: ['App Designs', 'Case Studies'],
     career: ['UI/UX Designer'],
   },
+  {
+    name: 'Graphic Design',
+    duration: '11 Weeks',
+    price: 'free',
+    topics: ['Adobe Photoshop', 'Illustrator', 'InDesign', 'Branding', 'Typography'],
+    projects: ['Branding Projects', 'Marketing Materials'],
+    career: ['Graphic Designer'],
+  },
 ]
 
 function ProgrammeCard({ prog }: { prog: (typeof PROGRAMME_DATA)[0] }) {
