@@ -33,6 +33,7 @@ export default function Programmes() {
               <p className='text-sm text-gray-600 dark:text-gray-300'>
                 {p.description}
               </p>
+              
             </div>
           ))}
         </div>

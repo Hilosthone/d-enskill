@@ -13,7 +13,7 @@ const BENEFITS = [
     title: 'Community Support',
     desc: 'Join a network of ambitious developers.',
   },
-  { title: 'Certificate', desc: 'Industry-recognized proof of your skills.' },
+  { title: 'Certificate', desc: 'A proof of course completion.' },
   {
     title: 'Real Projects',
     desc: 'Build your portfolio with production-grade apps.',

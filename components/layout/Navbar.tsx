@@ -75,10 +75,10 @@ export default function Navbar() {
             )}
           </button>
           <Link
-            href='/admission'
+            href='/auth/login'
             className='bg-primary-red text-white text-xs px-5 py-2 rounded-full font-semibold hover:bg-red-700 transition'
           >
-            Apply Now
+            Login Now
           </Link>
         </div>
 
@@ -117,11 +117,11 @@ export default function Navbar() {
             </button>
           ))}
           <Link
-            href='/admission'
+            href='/auth/login'
             onClick={() => setIsOpen(false)}
             className='bg-primary-red text-white text-sm px-8 py-3 rounded-full font-semibold hover:bg-red-700 transition mt-4'
           >
-            Apply Now
+            Login Now
           </Link>
         </div>
       )}
