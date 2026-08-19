@@ -492,7 +492,7 @@ export default function EnrollmentForm({
             {loading ? (
               <>
                 <Loader2 size={18} className='animate-spin' /> Connecting to
-                Paystack...
+                Flutterwave...
               </>
             ) : (
               'Proceed to Payment ➔'

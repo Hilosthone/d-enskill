@@ -378,4 +378,119 @@ export const apiClient = {
     )
     return res.json()
   },
+
+  // --- 6. Scholarship Enrollment & Auth ---
+  getActiveScholarshipCohorts: async () => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/scholarship/enrollment/cohorts/active`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', accept: '*/*' },
+      },
+    )
+    return res.json()
+  },
+
+  submitScholarshipApplication: async (payload: {
+    cohortId: string
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+    course: string
+    statement: string
+    country?: string
+    educationalBackground?: string
+    technicalBackground?: string
+    reasonForApplying?: string
+    motivation?: string
+    portfolioUrl?: string
+  }) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/scholarship/enrollment/apply`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: '*/*' },
+        body: JSON.stringify(payload),
+      },
+    )
+    return res.json()
+  },
+
+  getScholarshipStatus: async (email: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/scholarship/enrollment/status?email=${encodeURIComponent(email)}`,
+      {
+        method: 'GET',
+        headers: { accept: '*/*' },
+      },
+    )
+    return res.json()
+  },
+
+  initializeScholarshipPayment: async (payload: { applicationId: string }) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/scholarship/enrollment/payment/initialize`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: '*/*' },
+        body: JSON.stringify(payload),
+      },
+    )
+    return res.json()
+  },
+
+  verifyScholarshipPayment: async (payload: { reference: string }) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/scholarship/enrollment/payment/verify`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: '*/*' },
+        body: JSON.stringify(payload),
+      },
+    )
+    return res.json()
+  },
+
+  claimScholarship: async (payload: {
+    applicationId: string
+    password: string
+  }) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/scholarship/enrollment/claim`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: '*/*' },
+        body: JSON.stringify(payload),
+      },
+    )
+    return res.json()
+  },
+
+  signupScholarship: async (payload: {
+    name: string
+    email: string
+    password: string
+    cohort_id: number
+  }) => {
+    const res = await fetch(`${API_BASE_URL}/api/scholarship/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', accept: '*/*' },
+      body: JSON.stringify(payload),
+    })
+    return res.json()
+  },
+
+  signinScholarship: async (payload: { email: string; password: string }) => {
+    const res = await fetch(`${API_BASE_URL}/api/scholarship/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', accept: '*/*' },
+      body: JSON.stringify(payload),
+    })
+    const data = await res.json()
+    if (res.ok && (data.token || data.accessToken)) {
+      localStorage.setItem('denskill_token', data.token || data.accessToken)
+    }
+    return data
+  },
 }
