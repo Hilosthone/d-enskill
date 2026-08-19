@@ -5,6 +5,12 @@ import {
   FaProjectDiagram,
   FaMoneyBillWave,
   FaUsers,
+  FaChalkboardTeacher,
+  FaBriefcase,
+  FaHeadset,
+  FaHandHoldingUsd,
+  FaFileAlt,
+  FaNetworkWired,
 } from 'react-icons/fa'
 
 const reasons = [
@@ -14,6 +20,12 @@ const reasons = [
   { icon: FaUsers, title: 'Online & Physical Classes' },
   { icon: FaMoneyBillWave, title: 'Flexible Payment' },
   { icon: FaCertificate, title: 'Certificate Upon Graduation' },
+  { icon: FaChalkboardTeacher, title: 'Physical Teaching & Mentoring' },
+  { icon: FaBriefcase, title: 'Post-Training Internship' },
+  { icon: FaHeadset, title: 'Dedicated Tutor Support' },
+  { icon: FaHandHoldingUsd, title: 'Up to 90% Scholarships' },
+  { icon: FaFileAlt, title: 'CV & Resume Building' },
+  { icon: FaNetworkWired, title: 'Hiring Partner Network' },
 ]
 
 export default function WhyChooseUs() {
