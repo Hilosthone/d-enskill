@@ -1,41 +1,4 @@
-// 'use client'
-// import { ReactNode, useState } from 'react'
-// import { useRouter } from 'next/navigation'
-// import AdminNavbar from '@/components/admin/AdminNavbar'
-// import AdminSidebar from '@/components/admin/AdminSidebar'
-
-// export default function AdminLayout({ children }: { children: ReactNode }) {
-//   const router = useRouter()
-//   const [sidebarOpen, setSidebarOpen] = useState(false)
-
-//   const handleLogout = () => {
-//     sessionStorage.removeItem('adminAuth')
-//     router.push('/auth/login')
-//   }
-
-//   return (
-//     <div className='min-h-screen bg-gray-50 dark:bg-gray-950 flex'>
-//       {/* Sidebar Component */}
-//       <AdminSidebar
-//         isOpen={sidebarOpen}
-//         onClose={() => setSidebarOpen(false)}
-//         onLogout={handleLogout}
-//       />
-
-//       {/* Main Content Container */}
-//       <div className='flex-1 md:ml-64 flex flex-col min-w-0'>
-//         {/* Header Component */}
-//         <AdminNavbar onOpenSidebar={() => setSidebarOpen(true)} />
-
-//         {/* Page View Container */}
-//         <main className='flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto'>
-//           {children}
-//         </main>
-//       </div>
-//     </div>
-//   )
-// }
-
+//src/app/admin/layout.tsx
 'use client'
 import { ReactNode, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
