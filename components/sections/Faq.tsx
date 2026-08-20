@@ -43,7 +43,7 @@ export const FAQs = [
   },
   {
     q: 'What percentage of tuition does the scholarship cover?',
-    a: 'Selected exceptional candidates can receive up to a 90% tuition discount, significantly lowering the financial barrier to learning.',
+    a: 'Selected exceptional candidates can receive up to a 80% tuition discount, significantly lowering the financial barrier to learning.',
   },
 ]
 

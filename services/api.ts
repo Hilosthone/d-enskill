@@ -958,6 +958,7 @@ export const apiClient = {
     phone: string
     course: string
     statement: string
+    referredBy?: string
     country?: string
     educationalBackground?: string
     technicalBackground?: string
@@ -1054,181 +1055,221 @@ export const apiClient = {
   },
 
   // ==========================================
-// 7. SCHOLARSHIP ADMIN MANAGEMENT
-// Administrative control for tracking metrics, reviewing applications, and managing cohorts
-// ==========================================
+  // 7. SCHOLARSHIP ADMIN MANAGEMENT
+  // Administrative control for tracking metrics, reviewing applications, and managing cohorts
+  // ==========================================
 
-getScholarshipMetrics: async (cohortId?: string) => {
-  const query = cohortId ? `?cohortId=${encodeURIComponent(cohortId)}` : ''
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/metrics${query}`,
-    {
+  getScholarshipMetrics: async (cohortId?: string) => {
+    const query = cohortId ? `?cohortId=${encodeURIComponent(cohortId)}` : ''
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/metrics${query}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  getScholarshipApplications: async (filters?: {
+    cohortId?: string
+    status?: string
+  }) => {
+    const params = new URLSearchParams()
+    if (filters?.cohortId) params.append('cohortId', filters.cohortId)
+    if (filters?.status) params.append('status', filters.status)
+    const queryString = params.toString() ? `?${params.toString()}` : ''
+
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/applications${queryString}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  approveScholarshipApplication: async (
+    id: string,
+    payload?: { adminNotes?: string },
+  ) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/applications/${id}/approve`,
+      {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload || {}),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  rejectScholarshipApplication: async (
+    id: string,
+    payload?: { adminNotes?: string },
+  ) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/applications/${id}/reject`,
+      {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload || {}),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  manualOnboardScholarshipStudent: async (payload: {
+    firstName: string
+    middleName?: string
+    lastName: string
+    email: string
+    phone?: string
+    cohortId: string
+    course?: string
+    password?: string
+  }) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/students/manual-onboard`,
+      {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  getScholarshipCohorts: async () => {
+    const res = await fetch(`${API_BASE_URL}/api/admin/scholarships/cohorts`, {
       method: 'GET',
       headers: getAuthHeaders(),
-    },
-  )
-  return handleApiResponse(res)
-},
+    })
+    return handleApiResponse(res)
+  },
 
-getScholarshipApplications: async (filters?: {
-  cohortId?: string
-  status?: string
-}) => {
-  const params = new URLSearchParams()
-  if (filters?.cohortId) params.append('cohortId', filters.cohortId)
-  if (filters?.status) params.append('status', filters.status)
-  const queryString = params.toString() ? `?${params.toString()}` : ''
-
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/applications${queryString}`,
-    {
-      method: 'GET',
-      headers: getAuthHeaders(),
-    },
-  )
-  return handleApiResponse(res)
-},
-
-approveScholarshipApplication: async (
-  id: string,
-  payload?: { adminNotes?: string },
-) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/applications/${id}/approve`,
-    {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(payload || {}),
-    },
-  )
-  return handleApiResponse(res)
-},
-
-rejectScholarshipApplication: async (
-  id: string,
-  payload?: { adminNotes?: string },
-) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/applications/${id}/reject`,
-    {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(payload || {}),
-    },
-  )
-  return handleApiResponse(res)
-},
-
-manualOnboardScholarshipStudent: async (payload: {
-  firstName: string
-  middleName?: string
-  lastName: string
-  email: string
-  phone?: string
-  cohortId: string
-  course?: string
-  password?: string
-}) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/students/manual-onboard`,
-    {
+  createScholarshipCohort: async (payload: {
+    name: string
+    code: string
+    startDate: string
+    endDate: string
+    applicationOpenDate: string
+    applicationCloseDate: string
+  }) => {
+    const res = await fetch(`${API_BASE_URL}/api/admin/scholarships/cohorts`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(payload),
-    },
-  )
-  return handleApiResponse(res)
-},
-
-getScholarshipCohorts: async () => {
-  const res = await fetch(`${API_BASE_URL}/api/admin/scholarships/cohorts`, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  })
-  return handleApiResponse(res)
-},
-
-createScholarshipCohort: async (payload: {
-  name: string
-  code: string
-  startDate: string
-  endDate: string
-  applicationOpenDate: string
-  applicationCloseDate: string
-}) => {
-  const res = await fetch(`${API_BASE_URL}/api/admin/scholarships/cohorts`, {
-    method: 'POST',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(payload),
-  })
-  return handleApiResponse(res)
-},
-
-updateScholarshipCohort: async (
-  id: string,
-  payload: {
-    name?: string
-    code?: string
-    startDate?: string
-    endDate?: string
-    applicationOpenDate?: string
-    applicationCloseDate?: string
-    status?: string
+    })
+    return handleApiResponse(res)
   },
-) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}`,
-    {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(payload),
-    },
-  )
-  return handleApiResponse(res)
-},
 
-deleteScholarshipCohort: async (id: string) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}`,
-    {
-      method: 'DELETE',
-      headers: getAuthHeaders(),
+  updateScholarshipCohort: async (
+    id: string,
+    payload: {
+      name?: string
+      code?: string
+      startDate?: string
+      endDate?: string
+      applicationOpenDate?: string
+      applicationCloseDate?: string
+      status?: string
     },
-  )
-  return handleApiResponse(res)
-},
+  ) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}`,
+      {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      },
+    )
+    return handleApiResponse(res)
+  },
 
-updateScholarshipCohortStatus: async (id: string, status: string) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}/status`,
-    {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({ status }),
-    },
-  )
-  return handleApiResponse(res)
-},
+  deleteScholarshipCohort: async (id: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}`,
+      {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
 
-activateScholarshipCohort: async (id: string) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}/activate`,
-    {
-      method: 'PATCH',
-      headers: getAuthHeaders(),
-    },
-  )
-  return handleApiResponse(res)
-},
+  updateScholarshipCohortStatus: async (id: string, status: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}/status`,
+      {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ status }),
+      },
+    )
+    return handleApiResponse(res)
+  },
 
-deactivateScholarshipCohort: async (id: string) => {
-  const res = await fetch(
-    `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}/deactivate`,
-    {
-      method: 'PATCH',
-      headers: getAuthHeaders(),
-    },
-  )
-  return handleApiResponse(res)
-},
+  activateScholarshipCohort: async (id: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}/activate`,
+      {
+        method: 'PATCH',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  deactivateScholarshipCohort: async (id: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/cohorts/${id}/deactivate`,
+      {
+        method: 'PATCH',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  // ==========================================
+  // 7. SCHOLARSHIP ADMIN MANAGEMENT (Extensions)
+  // ==========================================
+
+  getPendingScholarshipApplications: async (cohortId?: string) => {
+    const query = cohortId ? `?cohortId=${encodeURIComponent(cohortId)}` : ''
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/applications/pending${query}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  getAwaitingPaymentScholarshipApplications: async (cohortId?: string) => {
+    const query = cohortId ? `?cohortId=${encodeURIComponent(cohortId)}` : ''
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/applications/awaiting-payment${query}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
+
+  getPaidScholarshipStudents: async (cohortId?: string) => {
+    const query = cohortId ? `?cohortId=${encodeURIComponent(cohortId)}` : ''
+    const res = await fetch(
+      `${API_BASE_URL}/api/admin/scholarships/applications/paid${query}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return handleApiResponse(res)
+  },
 }

@@ -14,7 +14,7 @@
 
 // const BENEFITS = [
 //   {
-//     title: '90% Tuition Discount',
+//     title: '80% Tuition Discount',
 //     desc: 'Substantial financial support for dedicated learners.',
 //   },
 //   {
@@ -107,7 +107,7 @@
 //         <p className='text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto'>
 //           Every cohort, outstanding applicants can receive up to{' '}
 //           <strong className='text-primary-purple'>
-//             90% tuition sponsorship
+//             80% tuition sponsorship
 //           </strong>{' '}
 //           to accelerate their tech career.
 //         </p>
@@ -291,7 +291,7 @@ import { apiClient } from '@/services/api'
 
 const BENEFITS = [
   {
-    title: '90% Tuition Discount',
+    title: '80% Tuition Discount',
     desc: 'Substantial financial support for dedicated learners.',
   },
   {
@@ -400,7 +400,7 @@ export default function ScholarshipPage() {
         <p className='text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto'>
           Every cohort, outstanding applicants can receive up to{' '}
           <strong className='text-primary-purple'>
-            90% tuition sponsorship
+            80% tuition sponsorship
           </strong>{' '}
           to accelerate their tech career.
         </p>
