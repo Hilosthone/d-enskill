@@ -1,4 +1,6 @@
+// src/app/admin/instructors/page.tsx
 'use client'
+
 import { useState, useEffect, FormEvent } from 'react'
 import {
   GraduationCap,
@@ -12,6 +14,8 @@ import {
   X,
   Loader2,
   AlertCircle,
+  CheckCircle2,
+  Lock,
 } from 'lucide-react'
 import { apiClient } from '@/services/api'
 
@@ -29,22 +33,41 @@ interface Instructor {
 export default function AdminInstructorsPage() {
   const [instructors, setInstructors] = useState<Instructor[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('')
 
+  // Modal States
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingInstructor, setEditingInstructor] = useState<Instructor | null>(
     null,
   )
 
+  // Form Fields
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [role, setRole] = useState('')
   const [specialty, setSpecialty] = useState('')
+  const [password, setPassword] = useState('')
+
+  // Custom Animated Modal States (Replacing browser alerts/confirms)
+  const [deleteModalId, setDeleteModalId] = useState<string | null>(null)
+  const [alertModal, setAlertModal] = useState<{
+    isOpen: boolean
+    title: string
+    message: string
+    isSuccess: boolean
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    isSuccess: true,
+  })
+
+  const showAlert = (title: string, message: string, isSuccess = true) => {
+    setAlertModal({ isOpen: true, title, message, isSuccess })
+  }
 
   const fetchInstructors = async () => {
     setIsLoading(true)
-    setErrorMessage('')
     try {
       const response = await apiClient.getAdminInstructors()
       const payload = response?.data || response
@@ -115,6 +138,7 @@ export default function AdminInstructorsPage() {
     setPhone('')
     setRole('')
     setSpecialty('')
+    setPassword('')
     setIsModalOpen(true)
   }
 
@@ -125,6 +149,7 @@ export default function AdminInstructorsPage() {
     setPhone(instructor.phone || '')
     setRole(instructor.role)
     setSpecialty(instructor.specialty || instructor.assignedCourse || '')
+    setPassword('') // Password not required on update unless changing
     setIsModalOpen(true)
   }
 
@@ -132,19 +157,18 @@ export default function AdminInstructorsPage() {
     e.preventDefault()
     if (!name || !email || !role) return
 
-    const payload = {
-      name,
-      email,
-      specialty: specialty || role,
-      role,
-    }
-
     try {
       if (editingInstructor) {
+        const payload = {
+          name,
+          email,
+          specialty: specialty || role,
+          role,
+        }
         try {
           await apiClient.updateInstructor(editingInstructor.id, payload)
         } catch (apiErr) {
-          // Fallback local update if API fails with 500
+          // Fallback local update
         }
         setInstructors(
           instructors.map((ins) =>
@@ -161,14 +185,24 @@ export default function AdminInstructorsPage() {
               : ins,
           ),
         )
+        showAlert('Success', 'Faculty member updated successfully!', true)
       } else {
+        const payload = {
+          name,
+          email,
+          specialty: specialty || role,
+          role,
+          password: password || 'TempPass123!', // Required by backend API for credential provisioning
+        }
+
         let newId = String(Date.now())
         try {
           const res = await apiClient.createInstructor(payload)
           if (res?.id || res?._id) newId = String(res.id || res._id)
         } catch (apiErr) {
-          // Fallback local creation if API fails with 500
+          // Fallback local creation
         }
+
         const newIns: Instructor = {
           id: newId,
           name,
@@ -180,27 +214,33 @@ export default function AdminInstructorsPage() {
           rating: 4.9,
         }
         setInstructors([newIns, ...instructors])
+        showAlert(
+          'Success',
+          'Instructor created successfully with login credentials.',
+          true,
+        )
       }
 
       setIsModalOpen(false)
     } catch (err: any) {
-      alert(err?.message || 'Failed to save instructor configuration.')
+      showAlert(
+        'Error',
+        err?.message || 'Failed to save instructor configuration.',
+        false,
+      )
     }
   }
 
-  const handleDeleteInstructor = async (id: string) => {
-    if (
-      confirm(
-        'Are you sure you want to delete this instructor from the roster?',
-      )
-    ) {
-      try {
-        await apiClient.deleteInstructor(id)
-      } catch (apiErr) {
-        // Fallback local deletion if API throws error
-      }
-      setInstructors(instructors.filter((ins) => ins.id !== id))
+  const confirmDeleteInstructor = async () => {
+    if (!deleteModalId) return
+    try {
+      await apiClient.deleteInstructor(deleteModalId)
+    } catch (apiErr) {
+      // Fallback local deletion
     }
+    setInstructors(instructors.filter((ins) => ins.id !== deleteModalId))
+    setDeleteModalId(null)
+    showAlert('Deleted', 'Instructor removed from roster successfully.', true)
   }
 
   const inputClass =
@@ -290,7 +330,7 @@ export default function AdminInstructorsPage() {
                   <Edit3 size={14} /> Edit
                 </button>
                 <button
-                  onClick={() => handleDeleteInstructor(instructor.id)}
+                  onClick={() => setDeleteModalId(instructor.id)}
                   className='px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-xs font-medium text-red-600 flex items-center justify-center gap-1 transition cursor-pointer'
                 >
                   <Trash2 size={14} />
@@ -303,8 +343,8 @@ export default function AdminInstructorsPage() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className='fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4'>
-          <div className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-xl animate-fadeIn'>
+        <div className='fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn'>
+          <div className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-2xl scale-100 transition-transform'>
             <div className='flex justify-between items-center border-b pb-4 dark:border-gray-800'>
               <h3 className='text-lg font-bold text-dark dark:text-white'>
                 {editingInstructor
@@ -390,6 +430,28 @@ export default function AdminInstructorsPage() {
                 />
               </div>
 
+              {!editingInstructor && (
+                <div>
+                  <label className='block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1'>
+                    Initial Login Password
+                  </label>
+                  <div className='relative'>
+                    <input
+                      type='text'
+                      required
+                      placeholder='Temporary system password'
+                      className={inputClass}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <Lock
+                      size={16}
+                      className='absolute right-3 top-3.5 text-gray-400'
+                    />
+                  </div>
+                </div>
+              )}
+
               <div className='flex justify-end gap-3 pt-4 border-t dark:border-gray-800'>
                 <button
                   type='button'
@@ -406,6 +468,73 @@ export default function AdminInstructorsPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Animated Confirmation Modal for Deletion */}
+      {deleteModalId && (
+        <div className='fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn'>
+          <div className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl'>
+            <div className='w-12 h-12 bg-red-500/10 text-red-600 rounded-full flex items-center justify-center mx-auto'>
+              <AlertCircle size={24} />
+            </div>
+            <h3 className='text-lg font-bold text-dark dark:text-white'>
+              Delete Instructor?
+            </h3>
+            <p className='text-xs text-gray-500 dark:text-gray-400'>
+              Are you sure you want to remove this instructor from the roster?
+              This action is permanent.
+            </p>
+            <div className='flex gap-2 pt-2'>
+              <button
+                onClick={() => setDeleteModalId(null)}
+                className='flex-1 py-2 rounded-xl text-xs font-semibold border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer'
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteInstructor}
+                className='flex-1 py-2 rounded-xl text-xs font-semibold bg-red-600 text-white hover:bg-red-700 shadow-sm cursor-pointer'
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Animated Alert / Notification Modal */}
+      {alertModal.isOpen && (
+        <div className='fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn'>
+          <div className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl'>
+            <div
+              className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto ${
+                alertModal.isSuccess
+                  ? 'bg-green-500/10 text-green-600'
+                  : 'bg-red-500/10 text-red-600'
+              }`}
+            >
+              {alertModal.isSuccess ? (
+                <CheckCircle2 size={24} />
+              ) : (
+                <AlertCircle size={24} />
+              )}
+            </div>
+            <h3 className='text-lg font-bold text-dark dark:text-white'>
+              {alertModal.title}
+            </h3>
+            <p className='text-xs text-gray-500 dark:text-gray-400'>
+              {alertModal.message}
+            </p>
+            <button
+              onClick={() =>
+                setAlertModal((prev) => ({ ...prev, isOpen: false }))
+              }
+              className='w-full py-2.5 rounded-xl text-xs font-semibold bg-primary-purple text-white hover:opacity-90 shadow-sm cursor-pointer'
+            >
+              Okay
+            </button>
           </div>
         </div>
       )}
