@@ -3,7 +3,7 @@ Here is the comprehensive frontend integration guide and endpoint reference for 
 ### General Configuration
 
 - **Base URL (Local):** `http://localhost:5000`
-- **Base URL (Production):** `[https://denskill-backend.vercel.app](https://denskill-backend.vercel.app)`
+- **Base URL (Production):** `[https://denskill-backend.onrender.com](https://denskill-backend.onrender.com)`
 - **Authentication Header:** Protected routes require the standard Bearer token schema:
 
 ```http

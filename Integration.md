@@ -1,6 +1,6 @@
 ## D Enskill Backend Integration Guide
 
-Base URL: `[https://denskill-backend.vercel.app](https://denskill-backend.vercel.app)`
+Base URL: `[https://denskill-backend.onrender.com](https://denskill-backend.onrender.com)`
 
 ---
 
@@ -34,7 +34,7 @@ The student onboarding process integrates registration metadata with Paystack ch
 
 ```bash
 curl -X 'POST' \
-  'https://denskill-backend.vercel.app/api/enrollments/initialize' \
+  'https://denskill-backend.onrender.com/api/enrollments/initialize' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -61,7 +61,7 @@ curl -X 'POST' \
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.vercel.app/api/enrollments/verify/o6jxn8b719' \
+  'https://denskill-backend.onrender.com/api/enrollments/verify/o6jxn8b719' \
   -H 'accept: */*'
 
 ```
@@ -84,7 +84,7 @@ curl -X 'GET' \
 
 ```bash
 curl -X 'POST' \
-  'https://denskill-backend.vercel.app/api/enrollments/set-password' \
+  'https://denskill-backend.onrender.com/api/enrollments/set-password' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -130,7 +130,7 @@ All dashboard endpoints require the Bearer Token acquired during sign-in.
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.vercel.app/api/dashboard/overview' \
+  'https://denskill-backend.onrender.com/api/dashboard/overview' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -143,7 +143,7 @@ curl -X 'GET' \
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.vercel.app/api/dashboard/profile' \
+  'https://denskill-backend.onrender.com/api/dashboard/profile' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -156,7 +156,7 @@ curl -X 'GET' \
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.vercel.app/api/dashboard/courses' \
+  'https://denskill-backend.onrender.com/api/dashboard/courses' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -169,7 +169,7 @@ curl -X 'GET' \
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.vercel.app/api/dashboard/payments' \
+  'https://denskill-backend.onrender.com/api/dashboard/payments' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -182,7 +182,7 @@ curl -X 'GET' \
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.vercel.app/api/dashboard/announcements' \
+  'https://denskill-backend.onrender.com/api/dashboard/announcements' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
