@@ -1,6 +1,6 @@
 ## D Enskill Backend Integration Guide
 
-Base URL: `[https://denskill-backend.onrender.com](https://denskill-backend.onrender.com)`
+Base URL: `[https://denskill-backend.vercel.app](https://denskill-backend.vercel.app)`
 
 ---
 
@@ -10,9 +10,9 @@ The student onboarding process integrates registration metadata with Paystack ch
 
 #### A. Initialize Enrollment & Paystack Checkout
 
-* **Endpoint:** `POST /api/enrollments/initialize`
-* **Content-Type:** `application/json`
-* **Payload Schema:**
+- **Endpoint:** `POST /api/enrollments/initialize`
+- **Content-Type:** `application/json`
+- **Payload Schema:**
 
 ```json
 {
@@ -28,14 +28,13 @@ The student onboarding process integrates registration metadata with Paystack ch
   "amountPaid": 0,
   "callback_url": "string"
 }
-
 ```
 
-* **Example cURL:**
+- **Example cURL:**
 
 ```bash
 curl -X 'POST' \
-  'https://denskill-backend.onrender.com/api/enrollments/initialize' \
+  'https://denskill-backend.vercel.app/api/enrollments/initialize' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -56,22 +55,22 @@ curl -X 'POST' \
 
 #### B. Verify Paystack Transaction
 
-* **Endpoint:** `GET /api/enrollments/verify/{reference}`
-* **Description:** Call this endpoint upon redirect from Paystack to validate the transaction reference and finalize enrollment tracking.
-* **Example cURL:**
+- **Endpoint:** `GET /api/enrollments/verify/{reference}`
+- **Description:** Call this endpoint upon redirect from Paystack to validate the transaction reference and finalize enrollment tracking.
+- **Example cURL:**
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.onrender.com/api/enrollments/verify/o6jxn8b719' \
+  'https://denskill-backend.vercel.app/api/enrollments/verify/o6jxn8b719' \
   -H 'accept: */*'
 
 ```
 
 #### C. Set Initial Password Post-Payment
 
-* **Endpoint:** `POST /api/enrollments/set-password`
-* **Content-Type:** `application/json`
-* **Payload Schema:**
+- **Endpoint:** `POST /api/enrollments/set-password`
+- **Content-Type:** `application/json`
+- **Payload Schema:**
 
 ```json
 {
@@ -79,14 +78,13 @@ curl -X 'GET' \
   "password": "string",
   "confirmPassword": "string"
 }
-
 ```
 
-* **Example cURL:**
+- **Example cURL:**
 
 ```bash
 curl -X 'POST' \
-  'https://denskill-backend.onrender.com/api/enrollments/set-password' \
+  'https://denskill-backend.vercel.app/api/enrollments/set-password' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -105,19 +103,19 @@ Manage standard user sessions, logins, and logouts.
 
 #### A. Register New User
 
-* **Endpoint:** `POST /api/auth/signup`
-* **Payload Schema:** `{ "name": "string", "email": "string", "password": "string" }`
+- **Endpoint:** `POST /api/auth/signup`
+- **Payload Schema:** `{ "name": "string", "email": "string", "password": "string" }`
 
 #### B. Log In User
 
-* **Endpoint:** `POST /api/auth/signin`
-* **Payload Schema:** `{ "email": "string", "password": "string" }`
-* **Response:** Returns a JWT bearer token required for dashboard authorization headers.
+- **Endpoint:** `POST /api/auth/signin`
+- **Payload Schema:** `{ "email": "string", "password": "string" }`
+- **Response:** Returns a JWT bearer token required for dashboard authorization headers.
 
 #### C. Log Out User
 
-* **Endpoint:** `POST /api/auth/logout`
-* **Security:** `-H 'Authorization: Bearer <JWT_TOKEN>'`
+- **Endpoint:** `POST /api/auth/logout`
+- **Security:** `-H 'Authorization: Bearer <JWT_TOKEN>'`
 
 ---
 
@@ -127,12 +125,12 @@ All dashboard endpoints require the Bearer Token acquired during sign-in.
 
 #### A. Get Complete Overview (All Tabs)
 
-* **Endpoint:** `GET /api/dashboard/overview`
-* **Example cURL:**
+- **Endpoint:** `GET /api/dashboard/overview`
+- **Example cURL:**
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.onrender.com/api/dashboard/overview' \
+  'https://denskill-backend.vercel.app/api/dashboard/overview' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -140,12 +138,12 @@ curl -X 'GET' \
 
 #### B. Get Student Profile Details
 
-* **Endpoint:** `GET /api/dashboard/profile`
-* **Example cURL:**
+- **Endpoint:** `GET /api/dashboard/profile`
+- **Example cURL:**
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.onrender.com/api/dashboard/profile' \
+  'https://denskill-backend.vercel.app/api/dashboard/profile' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -153,12 +151,12 @@ curl -X 'GET' \
 
 #### C. Get Enrolled Courses & Assigned Tutors
 
-* **Endpoint:** `GET /api/dashboard/courses`
-* **Example cURL:**
+- **Endpoint:** `GET /api/dashboard/courses`
+- **Example cURL:**
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.onrender.com/api/dashboard/courses' \
+  'https://denskill-backend.vercel.app/api/dashboard/courses' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -166,12 +164,12 @@ curl -X 'GET' \
 
 #### D. Get Payment History
 
-* **Endpoint:** `GET /api/dashboard/payments`
-* **Example cURL:**
+- **Endpoint:** `GET /api/dashboard/payments`
+- **Example cURL:**
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.onrender.com/api/dashboard/payments' \
+  'https://denskill-backend.vercel.app/api/dashboard/payments' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 
@@ -179,12 +177,12 @@ curl -X 'GET' \
 
 #### E. Get Portal Announcements
 
-* **Endpoint:** `GET /api/dashboard/announcements`
-* **Example cURL:**
+- **Endpoint:** `GET /api/dashboard/announcements`
+- **Example cURL:**
 
 ```bash
 curl -X 'GET' \
-  'https://denskill-backend.onrender.com/api/dashboard/announcements' \
+  'https://denskill-backend.vercel.app/api/dashboard/announcements' \
   -H 'accept: */*' \
   -H 'Authorization: Bearer <JWT_TOKEN>'
 

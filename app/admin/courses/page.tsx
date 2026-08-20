@@ -135,7 +135,7 @@ export default function AdminCoursesPage() {
 
     try {
       // Call backend endpoint: PATCH /api/admin/courses/{courseId}/assign-tutor
-      const endpoint = `${process.env.NEXT_PUBLIC_API_URL || 'https://denskill-backend.onrender.com'}/api/admin/courses/${selectedCourseForTutor.id}/assign-tutor`
+      const endpoint = `${process.env.NEXT_PUBLIC_API_URL || 'https://denskill-backend.vercel.app'}/api/admin/courses/${selectedCourseForTutor.id}/assign-tutor`
       const token =
         typeof window !== 'undefined'
           ? localStorage.getItem('token') ||

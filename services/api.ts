@@ -1,6 +1,6 @@
 // const API_BASE_URL =
 //   process.env.NEXT_PUBLIC_API_BASE_URL ||
-//   'https://denskill-backend.onrender.com'
+//   'https://denskill-backend.vercel.app'
 
 // // Helper to get auth header
 // const getAuthHeaders = () => {
@@ -495,14 +495,11 @@
 //   },
 // }
 
-
-
 // ==========================================
 // CONFIGURATION & ENVIRONMENT SETUP
 // ==========================================
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  'https://denskill-backend.onrender.com'
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'https://denskill-backend.vercel.app'
 
 /**
  * Helper utility to construct authenticated request headers.

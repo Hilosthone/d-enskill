@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'https://denskill-backend.onrender.com'
+  process.env.NEXT_PUBLIC_API_URL || 'https://denskill-backend.vercel.app'
 
 const getAuthHeaders = () => {
   const token =
@@ -67,13 +67,22 @@ export default function AdminPaymentsPage() {
           const amt = Number(tx.amount_paid || tx.total_amount || 0)
           const statusText = tx.payment_status || 'completed'
           return {
-            id: String(tx.reference || tx.id || `TXN-${Math.floor(Math.random() * 90000 + 10000)}`),
+            id: String(
+              tx.reference ||
+                tx.id ||
+                `TXN-${Math.floor(Math.random() * 90000 + 10000)}`,
+            ),
             name: tx.student_name || tx.name || 'Anonymous User',
             course: tx.course || 'Full-Stack Software Engineering',
             method: tx.method || 'Card (Paystack)',
             amount: `₦${amt.toLocaleString()}`,
             rawAmount: amt,
-            date: tx.created_at ? new Date(tx.created_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'Jul 30, 2026',
+            date: tx.created_at
+              ? new Date(tx.created_at).toLocaleString([], {
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                })
+              : 'Jul 30, 2026',
             status: statusText.charAt(0).toUpperCase() + statusText.slice(1),
           }
         }),
@@ -92,8 +101,12 @@ export default function AdminPaymentsPage() {
   }, [])
 
   const totalInflow = payments.reduce((acc, curr) => acc + curr.rawAmount, 0)
-  const completedCount = payments.filter((p) => p.status.toLowerCase() === 'completed').length
-  const pendingCount = payments.filter((p) => p.status.toLowerCase() !== 'completed').length
+  const completedCount = payments.filter(
+    (p) => p.status.toLowerCase() === 'completed',
+  ).length
+  const pendingCount = payments.filter(
+    (p) => p.status.toLowerCase() !== 'completed',
+  ).length
 
   const filteredPayments = payments.filter(
     (p) =>
@@ -110,7 +123,8 @@ export default function AdminPaymentsPage() {
             Financial Transactions
           </h2>
           <p className='text-sm text-gray-500'>
-            Monitor verified payments, installments, and Paystack settlement logs.
+            Monitor verified payments, installments, and Paystack settlement
+            logs.
           </p>
         </div>
         <button
@@ -142,17 +156,13 @@ export default function AdminPaymentsPage() {
           <span className='text-xs text-gray-400 font-semibold uppercase'>
             Completed Payments
           </span>
-          <p className='text-2xl font-bold text-green-600'>
-            {completedCount}
-          </p>
+          <p className='text-2xl font-bold text-green-600'>{completedCount}</p>
         </div>
         <div className='bg-white dark:bg-gray-950 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm space-y-1'>
           <span className='text-xs text-gray-400 font-semibold uppercase'>
             Partial / Pending Payments
           </span>
-          <p className='text-2xl font-bold text-amber-500'>
-            {pendingCount}
-          </p>
+          <p className='text-2xl font-bold text-amber-500'>{pendingCount}</p>
         </div>
       </div>
 

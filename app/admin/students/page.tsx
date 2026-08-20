@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 
 const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || 'https://denskill-backend.onrender.com'
+  process.env.NEXT_PUBLIC_API_URL || 'https://denskill-backend.vercel.app'
 
 const getAuthHeaders = () => {
   const token =
@@ -40,7 +40,10 @@ const apiClient = {
     return res.json()
   },
 
-  updateStudentStatus: async (userId: string | number, status: 'active' | 'frozen') => {
+  updateStudentStatus: async (
+    userId: string | number,
+    status: 'active' | 'frozen',
+  ) => {
     const res = await fetch(
       `${API_BASE_URL}/api/admin/students/${userId}/status`,
       {
@@ -82,7 +85,7 @@ export default function AdminStudentsPage() {
     setErrorMessage('')
     try {
       const response = await apiClient.getAdminStudents()
-      
+
       // Extract array correctly from { status: 'success', students: [...] }
       const payload = response?.data || response
       const list = Array.isArray(payload)
@@ -91,7 +94,10 @@ export default function AdminStudentsPage() {
 
       setStudents(
         list.map((st: any) => ({
-          id: st.id ?? st._id ?? `STU-${Math.floor(Math.random() * 90000 + 10000)}`,
+          id:
+            st.id ??
+            st._id ??
+            `STU-${Math.floor(Math.random() * 90000 + 10000)}`,
           name:
             st.name ||
             `${st.firstName || ''} ${st.lastName || ''}`.trim() ||
@@ -100,7 +106,9 @@ export default function AdminStudentsPage() {
           phone: st.phone || '+234 800 000 0000',
           course: st.course || st.program || 'Full-Stack Software Engineering',
           status: st.status === 'frozen' ? 'frozen' : 'active',
-          joinedDate: st.created_at ? new Date(st.created_at).toLocaleDateString() : 'Jul 2026',
+          joinedDate: st.created_at
+            ? new Date(st.created_at).toLocaleDateString()
+            : 'Jul 2026',
         })),
       )
     } catch (err: any) {
