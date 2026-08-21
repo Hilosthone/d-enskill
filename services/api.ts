@@ -716,6 +716,102 @@ export const apiClient = {
   },
 
   // ==========================================
+  // 3. STUDENT PORTAL DASHBOARD (Extended)
+  // ==========================================
+
+  getReceipts: async () => {
+    const res = await fetch(`${API_BASE_URL}/api/dashboard/receipts`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+    return res.json()
+  },
+
+  getScholarshipProfile: async () => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/dashboard/scholarship/profile`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return res.json()
+  },
+
+  verifyStudentScholarshipPayment: async (data: {
+    paymentReference: string
+    transactionId: string
+  }) => {
+    const res = await fetch(`${API_BASE_URL}/api/dashboard/payment/verify`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    })
+    return res.json()
+  },
+
+  getGrades: async () => {
+    const res = await fetch(`${API_BASE_URL}/api/dashboard/grades`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+    return res.json()
+  },
+
+  getCommunityPosts: async () => {
+    const res = await fetch(`${API_BASE_URL}/api/dashboard/community`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+    return res.json()
+  },
+
+  fetchCourseModules: async (courseId: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/dashboard/modules/${courseId}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return res.json()
+  },
+
+  getCourseSessions: async (courseId: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/dashboard/sessions/${courseId}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return res.json()
+  },
+
+  fetchCourseAssessments: async (courseId: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/dashboard/assessments/${courseId}`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      },
+    )
+    return res.json()
+  },
+
+  submitAssessment: async (assessmentId: number | string, content: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/api/dashboard/assessments/${assessmentId}/submit`,
+      {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ content }),
+      },
+    )
+    return res.json()
+  },
+
+  // ==========================================
   // 4. ADMIN AUTHENTICATION FLOW
   // Specialized administrative login portal
   // ==========================================
@@ -998,18 +1094,6 @@ export const apiClient = {
     )
     return res.json()
   },
-
-  // verifyScholarshipPayment: async (payload: { reference: string }) => {
-  //   const res = await fetch(
-  //     `${API_BASE_URL}/api/scholarship/enrollment/payment/verify`,
-  //     {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json', accept: '*/*' },
-  //       body: JSON.stringify(payload),
-  //     },
-  //   )
-  //   return res.json()
-  // },
 
   verifyScholarshipPayment: async (payload: { reference: string }) => {
     const res = await fetch(
