@@ -1381,7 +1381,7 @@ export const apiClient = {
 
   // Authenticate a system instructor/tutor
   tutorLogin: async (credentials: { email: string; password: string }) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/auth/login`, {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1390,10 +1390,8 @@ export const apiClient = {
       body: JSON.stringify(credentials),
     })
 
-    // Handle 401 and other errors first
     const data = await handleApiResponse(res)
 
-    // Save token if present in response (checking top-level or data wrapper)
     const token = data.token || data.accessToken || data.data?.token
     if (token && typeof window !== 'undefined') {
       localStorage.setItem('denskill_token', token)
@@ -1412,7 +1410,7 @@ export const apiClient = {
     weight: number
     due_date: string
   }) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/assessments`, {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/assessments`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
@@ -1423,7 +1421,7 @@ export const apiClient = {
   // Get all published assessments for a course
   getCourseAssessments: async (courseId: number | string) => {
     const res = await fetch(
-      `${API_BASE_URL}/api/tutors/assessments/${courseId}`,
+      `${API_BASE_URL}/api/tutor/assessments/${courseId}`,
       {
         method: 'GET',
         headers: getAuthHeaders(),
@@ -1445,7 +1443,7 @@ export const apiClient = {
     },
   ) => {
     const res = await fetch(
-      `${API_BASE_URL}/api/tutors/assessments/${assessmentId}`,
+      `${API_BASE_URL}/api/tutor/assessments/${assessmentId}`,
       {
         method: 'PUT',
         headers: getAuthHeaders(),
@@ -1458,7 +1456,7 @@ export const apiClient = {
   // Delete an assessment, quiz, or assignment
   deleteAssessment: async (assessmentId: number | string) => {
     const res = await fetch(
-      `${API_BASE_URL}/api/tutors/assessments/${assessmentId}`,
+      `${API_BASE_URL}/api/tutor/assessments/${assessmentId}`,
       {
         method: 'DELETE',
         headers: getAuthHeaders(),
@@ -1467,10 +1465,10 @@ export const apiClient = {
     return handleApiResponse(res)
   },
 
-  // View student submissions for an assessment
+  // View student submissions for a specific assessment
   getAssessmentSubmissions: async (assessmentId: number | string) => {
     const res = await fetch(
-      `${API_BASE_URL}/api/tutors/submissions/${assessmentId}`,
+      `${API_BASE_URL}/api/tutor/assessments/${assessmentId}/submissions`,
       {
         method: 'GET',
         headers: getAuthHeaders(),
@@ -1479,7 +1477,7 @@ export const apiClient = {
     return handleApiResponse(res)
   },
 
-  // Grade a student's submission
+  // Grade a student's submission and provide score/feedback
   gradeSubmission: async (
     submissionId: number | string,
     data: {
@@ -1488,7 +1486,7 @@ export const apiClient = {
     },
   ) => {
     const res = await fetch(
-      `${API_BASE_URL}/api/tutors/submissions/${submissionId}/grade`,
+      `${API_BASE_URL}/api/tutor/submissions/${submissionId}/grade`,
       {
         method: 'PUT',
         headers: getAuthHeaders(),
@@ -1498,27 +1496,25 @@ export const apiClient = {
     return handleApiResponse(res)
   },
 
-  // Submit iterative code review feedback or request revisions
-  reviewSubmission: async (
+  // Submit iterative review or feedback on a student code submission
+  submitSubmissionFeedback: async (
     submissionId: number | string,
-    data: {
-      score: number
-      feedback: string
-      review_status: string
+    data?: {
+      feedback?: string
     },
   ) => {
     const res = await fetch(
-      `${API_BASE_URL}/api/tutors/submissions/${submissionId}/review`,
+      `${API_BASE_URL}/api/tutor/submissions/${submissionId}/feedback`,
       {
         method: 'PUT',
         headers: getAuthHeaders(),
-        body: JSON.stringify(data),
+        body: data ? JSON.stringify(data) : undefined,
       },
     )
     return handleApiResponse(res)
   },
 
-  // Log attendance records for students
+  // Log daily attendance records for students in a course session
   logAttendance: async (data: {
     course_id: number | string
     attendance_records: Array<{
@@ -1526,7 +1522,7 @@ export const apiClient = {
       status: string
     }>
   }) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/attendance`, {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/attendance`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
@@ -1535,84 +1531,76 @@ export const apiClient = {
   },
 
   // Upload and organize weekly course modules, lectures, and resources
-  uploadCourseModule: async (data: {
-    course_id: number | string
-    title: string
-    week_number: number
-    content_type: string
-    resource_url: string
-    description: string
-  }) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/modules`, {
+  uploadCourseModule: async (data?: any) => {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/modules`, {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify(data) : undefined,
     })
     return handleApiResponse(res)
   },
 
   // Fetch all course modules and resource files for a specific course
   getCourseModules: async (courseId: number | string) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/modules/${courseId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/modules/${courseId}`, {
       method: 'GET',
       headers: getAuthHeaders(),
     })
     return handleApiResponse(res)
   },
 
-  // Schedule a live lecture session or office hours meeting link
-  scheduleLiveSession: async (data: {
-    course_id: number | string
-    title: string
-    session_type: string
-    meeting_link: string
-    scheduled_at: string
-    description: string
-  }) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/sessions`, {
+  // Schedule a live workshop session and conference link
+  scheduleLiveSession: async (data?: any) => {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/sessions`, {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify(data) : undefined,
     })
     return handleApiResponse(res)
   },
 
-  // Get upcoming and past live sessions for a course
+  // Get scheduled live sessions for a course
   getLiveSessions: async (courseId: number | string) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/sessions/${courseId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/sessions/${courseId}`, {
       method: 'GET',
       headers: getAuthHeaders(),
     })
     return handleApiResponse(res)
   },
 
-  // View enrolled student directory and cohort tracking roster
+  // Get list of registered students (roster) for a specific course
   getCourseRoster: async (courseId: number | string) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/roster/${courseId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/roster/${courseId}`, {
       method: 'GET',
       headers: getAuthHeaders(),
     })
     return handleApiResponse(res)
   },
 
-  // Publish a course-specific real-time announcement or deadline reminder
-  publishAnnouncement: async (data: {
-    course_id: number | string
-    title: string
-    content: string
-  }) => {
-    const res = await fetch(`${API_BASE_URL}/api/tutors/announcements`, {
+  // Create an announcement targeted to a specific course
+  publishAnnouncement: async (data?: any) => {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/announcements`, {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify(data) : undefined,
     })
     return handleApiResponse(res)
   },
 
-  // Get class grade distributions and early warning performance reports
+  // Get summary performance statistics and at-risk student lists for a course
   getCourseAnalytics: async (courseId: number | string) => {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/analytics/${courseId}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+    return handleApiResponse(res)
+  },
+
+  // Get assigned scholarship/cohort students list
+  getCohortStudents: async (cohortId?: number | string) => {
+    const query = cohortId ? `?cohortId=${cohortId}` : ''
     const res = await fetch(
-      `${API_BASE_URL}/api/tutors/analytics/${courseId}`,
+      `${API_BASE_URL}/api/tutor/students/cohort${query}`,
       {
         method: 'GET',
         headers: getAuthHeaders(),
