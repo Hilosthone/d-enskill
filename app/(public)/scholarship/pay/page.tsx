@@ -959,7 +959,11 @@ function ScholarshipPayInner() {
   const router = useRouter()
 
   const emailParam = searchParams.get('email') || ''
-  const referenceParam = searchParams.get('reference') || searchParams.get('trxref') || searchParams.get('transaction_id')
+  const referenceParam = searchParams.get('reference') || ''
+  
+  // Flutterwave return query parameters
+  const paymentStatus = searchParams.get('status')
+  const transactionId = searchParams.get('transaction_id') || searchParams.get('tx_ref') || searchParams.get('trxref')
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -969,11 +973,11 @@ function ScholarshipPayInner() {
 
   useEffect(() => {
     const initPage = async () => {
-      // Case 1: Returning from payment gateway with a reference in the URL
-      if (referenceParam) {
+      // Case 1: Returning from Flutterwave payment gateway
+      if (paymentStatus === 'successful' && transactionId) {
         setStep('verifying')
         try {
-          const res = await apiClient.verifyScholarshipPayment({ reference: referenceParam })
+          const res = await apiClient.verifyScholarshipPayment({ reference: transactionId })
           if (res.success || res.status === 'success' || res.verified) {
             const appData = res.application || res.data || {}
             const email = appData.email || emailParam
@@ -995,15 +999,16 @@ function ScholarshipPayInner() {
         return
       }
 
-      // Case 2: Standard initial load with email param
-      if (!emailParam) {
-        setError('No email address provided in the link.')
+      // Case 2: Standard initial load from email link (using email or reference ID)
+      const lookupIdentifier = emailParam || referenceParam
+      if (!lookupIdentifier) {
+        setError('No applicant identifier or email provided in the link.')
         setLoading(false)
         return
       }
 
       try {
-        const res = await apiClient.getScholarshipStatus(emailParam)
+        const res = await apiClient.getScholarshipStatus(lookupIdentifier)
         
         // Handle array or single object response depending on your API wrapper
         const appList = res.applications || (Array.isArray(res) ? res : [res.application || res])
@@ -1019,7 +1024,7 @@ function ScholarshipPayInner() {
             setStep('status-check')
           }
         } else {
-          setError('Could not locate a scholarship application for this email.')
+          setError('Could not locate a scholarship application for this link.')
         }
       } catch (err: any) {
         setError(err.message || 'Failed to verify scholarship status.')
@@ -1029,7 +1034,7 @@ function ScholarshipPayInner() {
     }
 
     initPage()
-  }, [emailParam, referenceParam, router])
+  }, [emailParam, referenceParam, paymentStatus, transactionId, router])
 
   const handleInitializePayment = async () => {
     const appId = application?.id || application?._id
@@ -1063,7 +1068,7 @@ function ScholarshipPayInner() {
       <div className='min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-6'>
         <Loader2 className='animate-spin text-primary-purple mb-4' size={40} />
         <p className='text-sm text-gray-500 font-medium'>
-          {referenceParam ? 'Verifying your payment transaction...' : 'Loading your scholarship details...'}
+          {transactionId ? 'Verifying your payment transaction...' : 'Loading your scholarship details...'}
         </p>
       </div>
     )
