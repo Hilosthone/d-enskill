@@ -689,8 +689,257 @@
 // }
 
 
+// // src/app/scholarship/pay/page.tsx
+// // 'model client'
+// 'use client'
+
+// import { useState, useEffect, Suspense } from 'react'
+// import { useSearchParams, useRouter } from 'next/navigation'
+// import { apiClient } from '@/services/api'
+// import {
+//   Award,
+//   CheckCircle2,
+//   Loader2,
+//   ShieldCheck,
+//   AlertCircle,
+//   ArrowRight,
+//   PartyPopper,
+// } from 'lucide-react'
+
+// function ScholarshipPayInner() {
+//   const searchParams = useSearchParams()
+//   const router = useRouter()
+
+//   const emailParam = searchParams.get('email') || ''
+//   const referenceParam = searchParams.get('reference') || searchParams.get('trxref')
+
+//   const [loading, setLoading] = useState(true)
+//   const [error, setError] = useState('')
+//   const [application, setApplication] = useState<any>(null)
+//   const [step, setStep] = useState<'status-check' | 'pay' | 'verifying' | 'success-celebrate'>('status-check')
+//   const [payLoading, setPayLoading] = useState(false)
+
+//   useEffect(() => {
+//     const initPage = async () => {
+//       // Case 1: Returning from payment gateway with a reference in the URL
+//       if (referenceParam) {
+//         setStep('verifying')
+//         try {
+//           const res = await apiClient.verifyScholarshipPayment({ reference: referenceParam })
+//           if (res.success || res.status === 'success') {
+//             const appData = res.application || res.data || {}
+//             const email = appData.email || emailParam
+//             const cohortId = appData.cohortId || appData.cohort_id || ''
+
+//             setStep('success-celebrate')
+//             setTimeout(() => {
+//               router.push(`/scholarship/signup?email=${encodeURIComponent(email)}&cohortId=${cohortId}`)
+//             }, 3500)
+//             return
+//           } else {
+//             setError(res.message || 'Payment verification failed.')
+//             setLoading(false)
+//           }
+//         } catch (err: any) {
+//           setError(err.message || 'Error verifying payment transaction.')
+//           setLoading(false)
+//         }
+//         return
+//       }
+
+//       // Case 2: Standard initial load with email param
+//       if (!emailParam) {
+//         setError('No email address provided in the link.')
+//         setLoading(false)
+//         return
+//       }
+
+//       try {
+//         const res = await apiClient.getScholarshipStatus(emailParam)
+//         if (res.success || res.application || res.status) {
+//           const appData = res.application || res
+//           setApplication(appData)
+
+//           if (appData.status === 'approved') {
+//             setStep('pay')
+//           } else {
+//             setStep('status-check')
+//           }
+//         } else {
+//           setError(
+//             res.message ||
+//               'Could not locate a scholarship application for this email.',
+//           )
+//         }
+//       } catch (err: any) {
+//         setError(err.message || 'Failed to verify scholarship status.')
+//       } finally {
+//         setLoading(false)
+//       }
+//     }
+
+//     initPage()
+//   }, [emailParam, referenceParam, router])
+
+//   const handleInitializePayment = async () => {
+//     if (!application?._id) return
+//     setPayLoading(true)
+//     try {
+//       const res = await apiClient.initializeScholarshipPayment({
+//         applicationId: application._id,
+//       })
+
+//       if (res.success && res.authorization_url) {
+//         window.location.href = res.authorization_url
+//       } else {
+//         alert(res.message || 'Failed to initialize payment gateway.')
+//         setPayLoading(false)
+//       }
+//     } catch (err: any) {
+//       alert(err.message || 'An error occurred while launching payment.')
+//       setPayLoading(false)
+//     }
+//   }
+
+//   // 1. Verifying state
+//   if (loading || step === 'verifying') {
+//     return (
+//       <div className='min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-6'>
+//         <Loader2 className='animate-spin text-primary-purple mb-4' size={40} />
+//         <p className='text-sm text-gray-500 font-medium'>
+//           {referenceParam ? 'Verifying your payment transaction...' : 'Loading your scholarship details...'}
+//         </p>
+//       </div>
+//     )
+//   }
+
+//   // 2. Success Celebration Screen
+//   if (step === 'success-celebrate') {
+//     return (
+//       <div className='min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col justify-center items-center p-4 md:p-6 overflow-hidden relative'>
+//         <div className='max-w-md w-full bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-8 text-center space-y-6 relative z-10'>
+//           <div className='w-16 h-16 bg-primary-purple/15 text-primary-purple rounded-full flex items-center justify-center mx-auto animate-pulse'>
+//             <PartyPopper size={36} />
+//           </div>
+//           <div className='space-y-2'>
+//             <h1 className='text-2xl font-extrabold text-dark dark:text-white'>
+//               Payment Successful! 🎉
+//             </h1>
+//             <p className='text-sm text-gray-500 dark:text-gray-400'>
+//               Your scholarship fee has been received. Taking you to setup your secure account now...
+//             </p>
+//           </div>
+//           <div className='flex items-center justify-center gap-2 text-xs text-primary-purple font-semibold'>
+//             <Loader2 size={16} className='animate-spin' /> Redirecting to Signup...
+//           </div>
+//         </div>
+//       </div>
+//     )
+//   }
+
+//   // 3. Main Payment / Status UI
+//   return (
+//     <div className='min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col justify-center items-center p-4 md:p-6'>
+//       <div className='max-w-xl w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 space-y-6'>
+//         <div className='text-center space-y-2'>
+//           <div className='inline-flex p-3 rounded-2xl bg-primary-purple/15 text-primary-purple mb-2'>
+//             <Award size={32} />
+//           </div>
+//           <h1 className='text-2xl font-bold text-dark dark:text-white'>
+//             D Enskill Academy Scholarship
+//           </h1>
+//           <p className='text-sm text-gray-500 dark:text-gray-400'>
+//             Secure your tech career grant to proceed with your registration.
+//           </p>
+//         </div>
+
+//         {error && (
+//           <div className='p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-600 flex items-start gap-3'>
+//             <AlertCircle size={20} className='shrink-0 mt-0.5' />
+//             <div className='text-sm font-medium'>{error}</div>
+//           </div>
+//         )}
+
+//         {!error && step === 'status-check' && application && (
+//           <div className='space-y-6 text-center py-4'>
+//             <div className='p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 space-y-2'>
+//               <h3 className='font-bold text-base'>Application Under Review</h3>
+//               <p className='text-sm'>
+//                 Hi <span className='font-semibold'>{application.firstName}</span>,
+//                 your application is currently <span className='uppercase font-bold'>{application.status}</span>.
+//               </p>
+//             </div>
+//           </div>
+//         )}
+
+//         {!error && step === 'pay' && application && (
+//           <div className='space-y-6'>
+//             <div className='p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-green-700 dark:text-green-400 text-center'>
+//               <h3 className='font-bold text-sm uppercase tracking-wide'>
+//                 Congratulations, {application.firstName}! 🎉
+//               </h3>
+//               <p className='text-xs mt-1'>
+//                 Your scholarship application has been officially approved.
+//               </p>
+//             </div>
+
+//             <div className='rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 p-5 space-y-3'>
+//               <div className='flex justify-between text-sm'>
+//                 <span className='text-gray-600 dark:text-gray-300'>Total Training Value</span>
+//                 <span className='font-semibold text-dark dark:text-white line-through'>₦80,000</span>
+//               </div>
+//               <div className='flex justify-between text-sm'>
+//                 <span className='text-green-600 dark:text-green-400'>Scholarship Grant (80% Covered)</span>
+//                 <span className='font-semibold text-green-600 dark:text-green-400'>-₦64,000</span>
+//               </div>
+//               <div className='border-t border-gray-200 dark:border-gray-700 pt-3 flex justify-between items-center'>
+//                 <span className='font-bold text-dark dark:text-white text-sm'>Student Contribution (20%)</span>
+//                 <span className='text-lg font-extrabold text-primary-purple'>₦16,000</span>
+//               </div>
+//             </div>
+
+//             <button
+//               disabled={payLoading}
+//               onClick={handleInitializePayment}
+//               className='w-full py-3.5 rounded-2xl bg-primary-purple hover:bg-purple-700 text-white font-semibold text-sm transition shadow-lg shadow-primary-purple/25 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer'
+//             >
+//               {payLoading ? (
+//                 <>
+//                   <Loader2 size={18} className='animate-spin' /> Initializing Secure Checkout...
+//                 </>
+//               ) : (
+//                 <>
+//                   Pay ₦16,000 & Continue to Signup <ArrowRight size={18} />
+//                 </>
+//               )}
+//             </button>
+
+//             <div className='flex items-center justify-center gap-2 text-xs text-gray-400'>
+//               <ShieldCheck size={16} className='text-green-500' /> Secured by Paystack & Flutterwave Gateway
+//             </div>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default function ScholarshipPayPage() {
+//   return (
+//     <Suspense
+//       fallback={
+//         <div className='min-h-screen bg-gray-50 dark:bg-gray-950 flex justify-center items-center'>
+//           <Loader2 className='animate-spin text-primary-purple' size={32} />
+//         </div>
+//       }
+//     >
+//       <ScholarshipPayInner />
+//     </Suspense>
+//   )
+// }
+
+
 // src/app/scholarship/pay/page.tsx
-// 'model client'
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
@@ -698,7 +947,6 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { apiClient } from '@/services/api'
 import {
   Award,
-  CheckCircle2,
   Loader2,
   ShieldCheck,
   AlertCircle,
@@ -756,20 +1004,23 @@ function ScholarshipPayInner() {
 
       try {
         const res = await apiClient.getScholarshipStatus(emailParam)
-        if (res.success || res.application || res.status) {
-          const appData = res.application || res
-          setApplication(appData)
+        
+        // Handle array or single object response depending on your API wrapper
+        const appList = res.applications || (Array.isArray(res) ? res : [res.application || res])
+        const appData = appList[0]
 
-          if (appData.status === 'approved') {
+        if (appData) {
+          setApplication(appData)
+          
+          const normalizedStatus = (appData.status || '').toUpperCase()
+          // Allow payment if status is PENDING or APPROVED (adjust if you want strict approval)
+          if (normalizedStatus === 'APPROVED' || normalizedStatus === 'PENDING') {
             setStep('pay')
           } else {
             setStep('status-check')
           }
         } else {
-          setError(
-            res.message ||
-              'Could not locate a scholarship application for this email.',
-          )
+          setError('Could not locate a scholarship application for this email.')
         }
       } catch (err: any) {
         setError(err.message || 'Failed to verify scholarship status.')
@@ -782,15 +1033,20 @@ function ScholarshipPayInner() {
   }, [emailParam, referenceParam, router])
 
   const handleInitializePayment = async () => {
-    if (!application?._id) return
+    // Fix: Use application.id instead of application._id for PostgreSQL
+    const appId = application?.id || application?._id
+    if (!appId) return
+
     setPayLoading(true)
     try {
       const res = await apiClient.initializeScholarshipPayment({
-        applicationId: application._id,
+        applicationId: appId,
       })
 
-      if (res.success && res.authorization_url) {
-        window.location.href = res.authorization_url
+      // Handle nested Flutterwave link returned from backend
+      const authUrl = res.data?.authorization_url || res.authorization_url
+      if (res.success && authUrl) {
+        window.location.href = authUrl
       } else {
         alert(res.message || 'Failed to initialize payment gateway.')
         setPayLoading(false)
@@ -865,7 +1121,7 @@ function ScholarshipPayInner() {
             <div className='p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 space-y-2'>
               <h3 className='font-bold text-base'>Application Under Review</h3>
               <p className='text-sm'>
-                Hi <span className='font-semibold'>{application.firstName}</span>,
+                Hi <span className='font-semibold'>{application.first_name || application.firstName}</span>,
                 your application is currently <span className='uppercase font-bold'>{application.status}</span>.
               </p>
             </div>
@@ -876,25 +1132,31 @@ function ScholarshipPayInner() {
           <div className='space-y-6'>
             <div className='p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-green-700 dark:text-green-400 text-center'>
               <h3 className='font-bold text-sm uppercase tracking-wide'>
-                Congratulations, {application.firstName}! 🎉
+                Congratulations, {application.first_name || application.firstName}! 🎉
               </h3>
               <p className='text-xs mt-1'>
-                Your scholarship application has been officially approved.
+                Your scholarship application has been officially processed for the <span className='font-semibold'>{application.course}</span> program.
               </p>
             </div>
 
             <div className='rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 p-5 space-y-3'>
               <div className='flex justify-between text-sm'>
                 <span className='text-gray-600 dark:text-gray-300'>Total Training Value</span>
-                <span className='font-semibold text-dark dark:text-white line-through'>₦80,000</span>
+                <span className='font-semibold text-dark dark:text-white line-through'>
+                  ₦{application.fee_details?.originalAmount?.toLocaleString() || '80,000'}
+                </span>
               </div>
               <div className='flex justify-between text-sm'>
                 <span className='text-green-600 dark:text-green-400'>Scholarship Grant (80% Covered)</span>
-                <span className='font-semibold text-green-600 dark:text-green-400'>-₦64,000</span>
+                <span className='font-semibold text-green-600 dark:text-green-400'>
+                  -₦{application.fee_details?.discountAmount?.toLocaleString() || '64,000'}
+                </span>
               </div>
               <div className='border-t border-gray-200 dark:border-gray-700 pt-3 flex justify-between items-center'>
                 <span className='font-bold text-dark dark:text-white text-sm'>Student Contribution (20%)</span>
-                <span className='text-lg font-extrabold text-primary-purple'>₦16,000</span>
+                <span className='text-lg font-extrabold text-primary-purple'>
+                  ₦{application.fee_details?.studentContribution?.toLocaleString() || '16,000'}
+                </span>
               </div>
             </div>
 
@@ -909,13 +1171,13 @@ function ScholarshipPayInner() {
                 </>
               ) : (
                 <>
-                  Pay ₦16,000 & Continue to Signup <ArrowRight size={18} />
+                  Pay ₦{application.fee_details?.studentContribution?.toLocaleString() || '16,000'} & Continue to Signup <ArrowRight size={18} />
                 </>
               )}
             </button>
 
             <div className='flex items-center justify-center gap-2 text-xs text-gray-400'>
-              <ShieldCheck size={16} className='text-green-500' /> Secured by Paystack & Flutterwave Gateway
+              <ShieldCheck size={16} className='text-green-500' /> Secured by Flutterwave Gateway
             </div>
           </div>
         )}
