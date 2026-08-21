@@ -959,7 +959,7 @@ function ScholarshipPayInner() {
   const router = useRouter()
 
   const emailParam = searchParams.get('email') || ''
-  const referenceParam = searchParams.get('reference') || searchParams.get('trxref')
+  const referenceParam = searchParams.get('reference') || searchParams.get('trxref') || searchParams.get('transaction_id')
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -974,7 +974,7 @@ function ScholarshipPayInner() {
         setStep('verifying')
         try {
           const res = await apiClient.verifyScholarshipPayment({ reference: referenceParam })
-          if (res.success || res.status === 'success') {
+          if (res.success || res.status === 'success' || res.verified) {
             const appData = res.application || res.data || {}
             const email = appData.email || emailParam
             const cohortId = appData.cohortId || appData.cohort_id || ''
@@ -1013,7 +1013,6 @@ function ScholarshipPayInner() {
           setApplication(appData)
           
           const normalizedStatus = (appData.status || '').toUpperCase()
-          // Allow payment if status is PENDING or APPROVED (adjust if you want strict approval)
           if (normalizedStatus === 'APPROVED' || normalizedStatus === 'PENDING') {
             setStep('pay')
           } else {
@@ -1033,9 +1032,11 @@ function ScholarshipPayInner() {
   }, [emailParam, referenceParam, router])
 
   const handleInitializePayment = async () => {
-    // Fix: Use application.id instead of application._id for PostgreSQL
     const appId = application?.id || application?._id
-    if (!appId) return
+    if (!appId) {
+      alert('Application ID is missing.')
+      return
+    }
 
     setPayLoading(true)
     try {
@@ -1043,9 +1044,8 @@ function ScholarshipPayInner() {
         applicationId: appId,
       })
 
-      // Handle nested Flutterwave link returned from backend
-      const authUrl = res.data?.authorization_url || res.authorization_url
-      if (res.success && authUrl) {
+      const authUrl = res.data?.authorization_url || res.authorization_url || res.payment_url
+      if ((res.success || res.status === 'success') && authUrl) {
         window.location.href = authUrl
       } else {
         alert(res.message || 'Failed to initialize payment gateway.')
