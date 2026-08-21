@@ -1018,7 +1018,11 @@ function ScholarshipPayInner() {
           setApplication(appData)
           
           const normalizedStatus = (appData.status || '').toUpperCase()
-          if (normalizedStatus === 'APPROVED' || normalizedStatus === 'PENDING') {
+          if (
+            normalizedStatus === 'APPROVED' || 
+            normalizedStatus === 'PENDING' || 
+            normalizedStatus === 'AWAITING_PAYMENT'
+          ) {
             setStep('pay')
           } else {
             setStep('status-check')
