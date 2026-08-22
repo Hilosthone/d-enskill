@@ -648,7 +648,8 @@ export default function StudentDashboardPage() {
         <div className='absolute right-0 top-0 w-32 h-32 bg-primary-purple/5 rounded-full blur-2xl pointer-events-none' />
         <div className='space-y-1 relative z-10'>
           <span className='text-[10px] uppercase tracking-wider text-gray-400 font-bold block'>
-            Student Portal Dashboard ({isScholarshipStudent ? 'Scholarship Track' : 'Regular Track'})
+            Student Portal Dashboard (
+            {isScholarshipStudent ? 'Scholarship Track' : 'Regular Track'})
           </span>
           <h1 className='text-2xl md:text-3xl font-bold text-dark dark:text-white'>
             Welcome back, {profile.firstName || profile.name || 'Scholar'}! 👋
@@ -659,7 +660,9 @@ export default function StudentDashboardPage() {
         </div>
         <div className='flex items-center gap-2 px-4 py-2 bg-primary-purple/15 text-primary-purple text-xs rounded-full font-bold relative z-10'>
           {isScholarshipStudent ? <Sparkles size={16} /> : <Award size={16} />}
-          {isScholarshipStudent ? 'Scholarship Beneficiary' : 'Enrolled Scholar'}
+          {isScholarshipStudent
+            ? 'Scholarship Beneficiary'
+            : 'Enrolled Scholar'}
         </div>
       </div>
 
@@ -717,7 +720,9 @@ export default function StudentDashboardPage() {
             )}
           </div>
           <span className='text-[10px] bg-primary-purple/15 text-primary-purple px-2.5 py-1 rounded-md font-semibold inline-block w-fit'>
-            Status: {activeCourse?.payment_status || (isScholarshipStudent ? 'Scholarship Active' : 'Active')}
+            Status:{' '}
+            {activeCourse?.payment_status ||
+              (isScholarshipStudent ? 'Scholarship Active' : 'Active')}
           </span>
         </div>
 
@@ -726,7 +731,9 @@ export default function StudentDashboardPage() {
           <div>
             <div className='flex items-center justify-between text-gray-400 mb-2'>
               <span className='text-xs font-semibold'>
-                {isScholarshipStudent ? 'Scholarship Status' : 'Credential Status'}
+                {isScholarshipStudent
+                  ? 'Scholarship Status'
+                  : 'Credential Status'}
               </span>
               <CheckCircle2 size={18} className='text-green-600' />
             </div>
@@ -734,15 +741,15 @@ export default function StudentDashboardPage() {
               {isScholarshipStudent
                 ? 'Award Granted'
                 : activeCourse?.payment_status === 'partial'
-                ? 'Partial / Verified'
-                : 'Active / Verified'}
+                  ? 'Partial / Verified'
+                  : 'Active / Verified'}
             </p>
             <p className='text-[11px] text-gray-500 mt-0.5'>
               {isScholarshipStudent
                 ? 'Subsidized tuition package enabled.'
                 : activeCourse
-                ? `Paid ₦${Number(activeCourse.amount_paid).toLocaleString()} of ₦${Number(activeCourse.total_amount).toLocaleString()}`
-                : 'Automated receipt generated.'}
+                  ? `Paid ₦${Number(activeCourse.amount_paid).toLocaleString()} of ₦${Number(activeCourse.total_amount).toLocaleString()}`
+                  : 'Automated receipt generated.'}
             </p>
           </div>
           {!isScholarshipStudent && (
@@ -770,10 +777,19 @@ export default function StudentDashboardPage() {
             </p>
           </div>
           <button
-            onClick={() => router.push(isScholarshipStudent ? '/student/scholarship' : '/student/payments')}
+            onClick={() =>
+              router.push(
+                isScholarshipStudent
+                  ? '/student/scholarship'
+                  : '/student/payments',
+              )
+            }
             className='text-[11px] text-primary-red font-bold hover:underline flex items-center gap-1 w-fit cursor-pointer'
           >
-            {isScholarshipStudent ? 'View Scholarship Details' : 'Manage Billing & Balances'} <ArrowRight size={12} />
+            {isScholarshipStudent
+              ? 'View Scholarship Details'
+              : 'Manage Billing & Balances'}{' '}
+            <ArrowRight size={12} />
           </button>
         </div>
       </div>
@@ -800,17 +816,26 @@ export default function StudentDashboardPage() {
           ) : scholarshipData ? (
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs'>
               <div className='p-4 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 space-y-1'>
-                <span className='text-gray-400 uppercase font-bold tracking-wider'>Grant Status</span>
-                <p className='text-sm font-bold text-dark dark:text-white'>Active Scholarship Grant</p>
+                <span className='text-gray-400 uppercase font-bold tracking-wider'>
+                  Grant Status
+                </span>
+                <p className='text-sm font-bold text-dark dark:text-white'>
+                  Active Scholarship Grant
+                </p>
               </div>
               <div className='p-4 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 space-y-1'>
-                <span className='text-gray-400 uppercase font-bold tracking-wider'>Support Reference</span>
-                <p className='text-sm font-bold text-dark dark:text-white'>{scholarshipData.reference || 'Verified'}</p>
+                <span className='text-gray-400 uppercase font-bold tracking-wider'>
+                  Support Reference
+                </span>
+                <p className='text-sm font-bold text-dark dark:text-white'>
+                  {scholarshipData.reference || 'Verified'}
+                </p>
               </div>
             </div>
           ) : (
             <div className='text-center py-6 text-xs text-gray-400'>
-              Scholarship profile initialized successfully. Complete any prerequisite contribution milestones if prompted.
+              Scholarship profile initialized successfully. Complete any
+              prerequisite contribution milestones if prompted.
             </div>
           )}
         </div>
@@ -823,7 +848,8 @@ export default function StudentDashboardPage() {
                 Installment Breakdown & Timeline Health
               </h3>
               <p className='text-xs text-gray-500'>
-                Track your tuition milestone progression and payment schedule health.
+                Track your tuition milestone progression and payment schedule
+                health.
               </p>
             </div>
             <button
@@ -912,7 +938,7 @@ export default function StudentDashboardPage() {
           </p>
         </div>
         <a
-          href='https://wa.me/2348134984001'
+          href='https://chat.whatsapp.com/GlamSVoGeu17suyzt80Dkw?s=cl&p=a&ilr=0'
           target='_blank'
           rel='noopener noreferrer'
           className='px-6 py-3 bg-green-600 text-white font-bold text-xs rounded-xl hover:bg-green-700 transition-all text-center whitespace-nowrap shadow-md flex items-center gap-2'

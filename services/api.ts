@@ -1379,7 +1379,36 @@ export const apiClient = {
   // TUTORS / INSTRUCTORS ENDPOINTS
   // ==========================================
 
+  // Fetch courses assigned specifically to the logged-in tutor
+  getTutorAssignedCourses: async () => {
+    const res = await fetch(`${API_BASE_URL}/api/tutor/courses`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+    return handleApiResponse(res)
+  },
+
   // Authenticate a system instructor/tutor
+  // tutorLogin: async (credentials: { email: string; password: string }) => {
+  //   const res = await fetch(`${API_BASE_URL}/api/tutor/login`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       accept: '*/*',
+  //     },
+  //     body: JSON.stringify(credentials),
+  //   })
+
+  //   const data = await handleApiResponse(res)
+
+  //   const token = data.token || data.accessToken || data.data?.token
+  //   if (token && typeof window !== 'undefined') {
+  //     localStorage.setItem('denskill_token', token)
+  //   }
+
+  //   return data
+  // },
+
   tutorLogin: async (credentials: { email: string; password: string }) => {
     const res = await fetch(`${API_BASE_URL}/api/tutor/login`, {
       method: 'POST',
@@ -1393,8 +1422,18 @@ export const apiClient = {
     const data = await handleApiResponse(res)
 
     const token = data.token || data.accessToken || data.data?.token
-    if (token && typeof window !== 'undefined') {
-      localStorage.setItem('denskill_token', token)
+    const tutor = data.tutor || data.data?.tutor
+
+    if (typeof window !== 'undefined') {
+      if (token) {
+        localStorage.setItem('denskill_tutor_token', token)
+      }
+
+      if (tutor) {
+        localStorage.setItem('denskill_tutor', JSON.stringify(tutor))
+      }
+
+      localStorage.setItem('denskill_tutor_logged', 'true')
     }
 
     return data
@@ -1596,7 +1635,7 @@ export const apiClient = {
     return handleApiResponse(res)
   },
 
-  // Get assigned scholarship/cohort students list
+  // Get assigned cohort students list (supports unified regular + scholarship roster)
   getCohortStudents: async (cohortId?: number | string) => {
     const query = cohortId ? `?cohortId=${cohortId}` : ''
     const res = await fetch(
