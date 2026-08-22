@@ -1,3 +1,134 @@
+// 'use client'
+// import { useState, useEffect } from 'react'
+// import Link from 'next/link'
+// import { usePathname, useRouter } from 'next/navigation'
+// import * as Scroll from 'react-scroll'
+// import { useTheme } from 'next-themes'
+// import { NAV_LINKS } from '@/constants/navigation'
+// import { FaRocket, FaBars, FaTimes, FaSun, FaMoon } from 'react-icons/fa'
+
+// export default function Navbar() {
+//   const [mounted, setMounted] = useState(false)
+//   const [isOpen, setIsOpen] = useState(false)
+//   const pathname = usePathname()
+//   const router = useRouter()
+//   const isHome = pathname === '/'
+//   const { resolvedTheme, setTheme } = useTheme()
+
+//   useEffect(() => setMounted(true), [])
+
+//   // Prevents hydration errors by not rendering until mounted
+//   if (!mounted) return null
+
+//   const isDark = resolvedTheme === 'dark'
+
+//   const handleNavClick = (path: string) => {
+//     setIsOpen(false)
+//     if (isHome) {
+//       // Smooth scroll if already on home
+//       Scroll.scroller.scrollTo(path, {
+//         smooth: true,
+//         duration: 600,
+//         offset: -80,
+//       })
+//     } else {
+//       // Redirect to home and append hash to scroll once loaded
+//       router.push(`/#${path}`)
+//     }
+//   }
+
+//   return (
+//     <header className='fixed top-4 left-0 right-0 z-[100] px-4 md:px-6'>
+//       <nav className='max-w-6xl mx-auto bg-white/70 dark:bg-dark/70 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-lg rounded-full px-6 py-3 flex items-center justify-between'>
+//         {/* Logo */}
+//         <Link href='/' className='flex items-center gap-2 group'>
+//           <FaRocket className='text-primary-red text-xl' />
+//           <span className='text-lg font-bold text-dark dark:text-white'>
+//             D <span className='text-primary-red'>Enskill</span>
+//           </span>
+//         </Link>
+
+//         {/* Desktop Links */}
+//         <div className='hidden md:flex items-center gap-8'>
+//           {NAV_LINKS.map((link) => (
+//             <button
+//               key={link.path}
+//               onClick={() => handleNavClick(link.path)}
+//               className='text-sm font-extrabold cursor-pointer text-dark/70 dark:text-white/70 hover:text-primary-purple transition-colors'
+//             >
+//               {link.name}
+//             </button>
+//           ))}
+//         </div>
+
+//         {/* Desktop Actions & Theme Toggle */}
+//         <div className='hidden md:flex items-center gap-3'>
+//           <button
+//             onClick={() => setTheme(isDark ? 'light' : 'dark')}
+//             aria-label='Toggle Theme'
+//             className='p-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-800/50 text-dark dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer'
+//           >
+//             {isDark ? (
+//               <FaSun className='text-amber-400 text-sm' />
+//             ) : (
+//               <FaMoon className='text-gray-700 text-sm' />
+//             )}
+//           </button>
+//           <Link
+//             href='/auth/login'
+//             className='bg-primary-red text-white text-xs px-5 py-2 rounded-full font-semibold hover:bg-red-700 transition'
+//           >
+//             Login Now
+//           </Link>
+//         </div>
+
+//         {/* Mobile Actions Container (Hamburger + Theme Toggle) */}
+//         <div className='flex items-center gap-2 md:hidden'>
+//           <button
+//             onClick={() => setTheme(isDark ? 'light' : 'dark')}
+//             aria-label='Toggle Theme'
+//             className='p-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-800/50 text-dark dark:text-white transition cursor-pointer'
+//           >
+//             {isDark ? (
+//               <FaSun className='text-amber-400 text-sm' />
+//             ) : (
+//               <FaMoon className='text-gray-700 text-sm' />
+//             )}
+//           </button>
+//           <button
+//             className='p-2 text-dark dark:text-white z-[110]'
+//             onClick={() => setIsOpen(!isOpen)}
+//           >
+//             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+//           </button>
+//         </div>
+//       </nav>
+
+//       {/* Mobile Menu */}
+//       {isOpen && (
+//         <div className='fixed inset-0 z-[95] bg-white/95 dark:bg-dark/95 backdrop-blur-md flex flex-col items-center justify-center gap-8'>
+//           {NAV_LINKS.map((link) => (
+//             <button
+//               key={link.path}
+//               onClick={() => handleNavClick(link.path)}
+//               className='text-3xl font-bold text-dark font-extrabold dark:text-white hover:text-primary-purple transition-colors'
+//             >
+//               {link.name}
+//             </button>
+//           ))}
+//           <Link
+//             href='/auth/login'
+//             onClick={() => setIsOpen(false)}
+//             className='bg-primary-red text-white text-sm px-8 py-3 rounded-full font-semibold hover:bg-red-700 transition mt-4'
+//           >
+//             Login Now
+//           </Link>
+//         </div>
+//       )}
+//     </header>
+//   )
+// }
+
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -16,6 +147,15 @@ export default function Navbar() {
   const { resolvedTheme, setTheme } = useTheme()
 
   useEffect(() => setMounted(true), [])
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
 
   // Prevents hydration errors by not rendering until mounted
   if (!mounted) return null
@@ -38,93 +178,108 @@ export default function Navbar() {
   }
 
   return (
-    <header className='fixed top-4 left-0 right-0 z-[100] px-4 md:px-6'>
-      <nav className='max-w-6xl mx-auto bg-white/70 dark:bg-dark/70 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-lg rounded-full px-6 py-3 flex items-center justify-between'>
-        {/* Logo */}
-        <Link href='/' className='flex items-center gap-2 group'>
-          <FaRocket className='text-primary-red text-xl' />
-          <span className='text-lg font-bold text-dark dark:text-white'>
-            D <span className='text-primary-red'>Enskill</span>
-          </span>
-        </Link>
-
-        {/* Desktop Links */}
-        <div className='hidden md:flex items-center gap-8'>
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link.path}
-              onClick={() => handleNavClick(link.path)}
-              className='text-sm font-extrabold cursor-pointer text-dark/70 dark:text-white/70 hover:text-primary-purple transition-colors'
-            >
-              {link.name}
-            </button>
-          ))}
-        </div>
-
-        {/* Desktop Actions & Theme Toggle */}
-        <div className='hidden md:flex items-center gap-3'>
-          <button
-            onClick={() => setTheme(isDark ? 'light' : 'dark')}
-            aria-label='Toggle Theme'
-            className='p-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-800/50 text-dark dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer'
-          >
-            {isDark ? (
-              <FaSun className='text-amber-400 text-sm' />
-            ) : (
-              <FaMoon className='text-gray-700 text-sm' />
-            )}
-          </button>
-          <Link
-            href='/auth/login'
-            className='bg-primary-red text-white text-xs px-5 py-2 rounded-full font-semibold hover:bg-red-700 transition'
-          >
-            Login Now
+    <>
+      <header className='fixed top-4 left-0 right-0 z-[100] px-4 md:px-6'>
+        <nav className='max-w-6xl mx-auto bg-white/70 dark:bg-dark/70 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-lg rounded-full px-6 py-3 flex items-center justify-between'>
+          {/* Logo */}
+          <Link href='/' className='flex items-center gap-2 group'>
+            <FaRocket className='text-primary-red text-xl' />
+            <span className='text-lg font-bold text-dark dark:text-white'>
+              D <span className='text-primary-red'>Enskill</span>
+            </span>
           </Link>
-        </div>
 
-        {/* Mobile Actions Container (Hamburger + Theme Toggle) */}
-        <div className='flex items-center gap-2 md:hidden'>
-          <button
-            onClick={() => setTheme(isDark ? 'light' : 'dark')}
-            aria-label='Toggle Theme'
-            className='p-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-800/50 text-dark dark:text-white transition cursor-pointer'
-          >
-            {isDark ? (
-              <FaSun className='text-amber-400 text-sm' />
-            ) : (
-              <FaMoon className='text-gray-700 text-sm' />
-            )}
-          </button>
-          <button
-            className='p-2 text-dark dark:text-white z-[110]'
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-          </button>
-        </div>
-      </nav>
+          {/* Desktop Links */}
+          <div className='hidden md:flex items-center gap-8'>
+            {NAV_LINKS.map((link) => (
+              <button
+                key={link.path}
+                onClick={() => handleNavClick(link.path)}
+                className='text-sm font-extrabold cursor-pointer text-dark/70 dark:text-white/70 hover:text-primary-purple transition-colors'
+              >
+                {link.name}
+              </button>
+            ))}
+          </div>
 
-      {/* Mobile Menu */}
+          {/* Desktop Actions & Theme Toggle */}
+          <div className='hidden md:flex items-center gap-3'>
+            <button
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              aria-label='Toggle Theme'
+              className='p-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-800/50 text-dark dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer'
+            >
+              {isDark ? (
+                <FaSun className='text-amber-400 text-sm' />
+              ) : (
+                <FaMoon className='text-gray-700 text-sm' />
+              )}
+            </button>
+            <Link
+              href='/auth/login'
+              className='bg-primary-red text-white text-xs px-5 py-2 rounded-full font-semibold hover:bg-red-700 transition'
+            >
+              Login Now
+            </Link>
+          </div>
+
+          {/* Mobile Actions (Theme Toggle + Hamburger) */}
+          <div className='flex items-center gap-2 md:hidden'>
+            <button
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              aria-label='Toggle Theme'
+              className='p-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-800/50 text-dark dark:text-white transition cursor-pointer'
+            >
+              {isDark ? (
+                <FaSun className='text-amber-400 text-sm' />
+              ) : (
+                <FaMoon className='text-gray-700 text-sm' />
+              )}
+            </button>
+
+            <button
+              aria-label='Open Menu'
+              className='p-2 text-dark dark:text-white cursor-pointer focus:outline-none'
+              onClick={() => setIsOpen(true)}
+            >
+              <FaBars size={24} />
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Fullscreen Mobile Overlay with Prominent Close Button */}
       {isOpen && (
-        <div className='fixed inset-0 z-[95] bg-white/95 dark:bg-dark/95 backdrop-blur-md flex flex-col items-center justify-center gap-8'>
+        <div className='fixed inset-0 z-[200] bg-white dark:bg-dark backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden'>
+          {/* Explicit Cancel / Close Button in the top-right corner */}
+          <button
+            onClick={() => setIsOpen(false)}
+            aria-label='Close Menu'
+            className='absolute top-6 right-6 p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-dark dark:text-white hover:bg-red-500 hover:text-white dark:hover:bg-red-500 transition-all cursor-pointer shadow-md'
+          >
+            <FaTimes size={26} />
+          </button>
+
+          {/* Navigation Links */}
           {NAV_LINKS.map((link) => (
             <button
               key={link.path}
               onClick={() => handleNavClick(link.path)}
-              className='text-3xl font-bold text-dark font-extrabold dark:text-white hover:text-primary-purple transition-colors'
+              className='text-3xl font-extrabold text-dark dark:text-white hover:text-primary-purple transition-colors cursor-pointer'
             >
               {link.name}
             </button>
           ))}
+
           <Link
             href='/auth/login'
             onClick={() => setIsOpen(false)}
-            className='bg-primary-red text-white text-sm px-8 py-3 rounded-full font-semibold hover:bg-red-700 transition mt-4'
+            className='bg-primary-red text-white text-base px-10 py-3 rounded-full font-bold hover:bg-red-700 transition mt-4 shadow-lg'
           >
             Login Now
           </Link>
         </div>
       )}
-    </header>
+    </>
   )
 }
