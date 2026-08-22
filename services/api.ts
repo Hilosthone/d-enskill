@@ -1040,6 +1040,7 @@ export const apiClient = {
     )
     return res.json()
   },
+
   // Execute an administrative override for any disputed score or academic adjustment
   executeGradeOverride: async (gradeId: string | number) => {
     const res = await fetch(
@@ -1061,6 +1062,23 @@ export const apiClient = {
         headers: getAuthHeaders(),
       },
     )
+    return res.json()
+  },
+
+  // Send direct custom email messages to one or multiple users via Resend
+  sendCustomEmail: async (data: {
+    emails: string
+    subject: string
+    message: string
+  }) => {
+    const res = await fetch(`${API_BASE_URL}/api/admin/emails/send`, {
+      method: 'POST',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
     return res.json()
   },
 

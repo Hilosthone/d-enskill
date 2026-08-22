@@ -121,6 +121,7 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  Mail,
   X,
   Award,
   Layers,
@@ -150,9 +151,14 @@ const adminNavItems = [
   { label: 'Payments', href: '/admin/payments', icon: CreditCard },
   { label: 'Courses', href: '/admin/courses', icon: BookOpen },
   { label: 'Announcements', href: '/admin/announcements', icon: Bell },
+  { label: 'Send Email', href: '/admin/emails', icon: Mail },
   { label: 'Instructors', href: '/admin/instructors', icon: GraduationCap },
   { label: 'Reports', href: '/admin/reports', icon: BarChart3 },
-  { label: 'Grade Overrides', href: '/admin/grades-override', icon: ClipboardCheck },
+  {
+    label: 'Grade Overrides',
+    href: '/admin/grades-override',
+    icon: ClipboardCheck,
+  },
   { label: 'Attendance Trends', href: '/admin/attendance', icon: UserCheck },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ]
