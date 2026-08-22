@@ -910,11 +910,41 @@ export const apiClient = {
     return res.json()
   },
 
-  createAnnouncement: async (payload: { title: string; content: string }) => {
+  createAnnouncement: async (payload: {
+    title: string
+    content: string
+    target?: string
+    priority?: string
+  }) => {
     const res = await fetch(`${API_BASE_URL}/api/admin/announcements`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(payload),
+    })
+    return res.json()
+  },
+
+  updateAnnouncement: async (
+    id: number | string,
+    payload: {
+      title?: string
+      content?: string
+      target?: string
+      priority?: string
+    },
+  ) => {
+    const res = await fetch(`${API_BASE_URL}/api/admin/announcements/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    })
+    return res.json()
+  },
+
+  deleteAnnouncement: async (id: number | string) => {
+    const res = await fetch(`${API_BASE_URL}/api/admin/announcements/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
     })
     return res.json()
   },
