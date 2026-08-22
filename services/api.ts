@@ -712,12 +712,16 @@ export const apiClient = {
       method: 'GET',
       headers: getAuthHeaders(),
     })
-    return res.json()
-  },
 
-  // ==========================================
-  // 3. STUDENT PORTAL DASHBOARD (Extended)
-  // ==========================================
+    const data = await res.json()
+
+    // If the server returns an error status (e.g., 401, 500), throw it so the catch block handles it
+    if (!res.ok) {
+      throw new Error(data.message || 'Failed to fetch announcements')
+    }
+
+    return data
+  },
 
   getReceipts: async () => {
     const res = await fetch(`${API_BASE_URL}/api/dashboard/receipts`, {
