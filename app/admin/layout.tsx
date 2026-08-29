@@ -37,7 +37,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = () => {
     sessionStorage.removeItem('adminAuth')
-    router.push('/auth/admin-login')
+    router.push('/auth/login')
   }
 
   return (
