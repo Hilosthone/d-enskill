@@ -16,6 +16,7 @@
 //   AlertCircle,
 //   CheckCircle2,
 //   Lock,
+//   Link as LinkIcon,
 // } from 'lucide-react'
 // import { apiClient } from '@/services/api'
 
@@ -28,6 +29,11 @@
 //   assignedCourse?: string
 //   specialty?: string
 //   rating?: number
+// }
+
+// interface Course {
+//   id: string
+//   title: string
 // }
 
 // // Standardized academy program tracks
@@ -48,6 +54,7 @@
 
 // export default function AdminInstructorsPage() {
 //   const [instructors, setInstructors] = useState<Instructor[]>([])
+//   const [courses, setCourses] = useState<Course[]>([])
 //   const [isLoading, setIsLoading] = useState(true)
 
 //   // Modal States
@@ -55,6 +62,11 @@
 //   const [editingInstructor, setEditingInstructor] = useState<Instructor | null>(
 //     null,
 //   )
+
+//   // Assign Course Modal State
+//   const [assignModalInstructor, setAssignModalInstructor] =
+//     useState<Instructor | null>(null)
+//   const [selectedCourseId, setSelectedCourseId] = useState('')
 
 //   // Form Fields
 //   const [name, setName] = useState('')
@@ -64,7 +76,7 @@
 //   const [specialty, setSpecialty] = useState('')
 //   const [password, setPassword] = useState('')
 
-//   // Custom Animated Modal States (Replacing browser alerts/confirms)
+//   // Custom Animated Modal States
 //   const [deleteModalId, setDeleteModalId] = useState<string | null>(null)
 //   const [alertModal, setAlertModal] = useState<{
 //     isOpen: boolean
@@ -82,11 +94,17 @@
 //     setAlertModal({ isOpen: true, title, message, isSuccess })
 //   }
 
-//   const fetchInstructors = async () => {
+//   const fetchData = async () => {
 //     setIsLoading(true)
 //     try {
-//       const response = await apiClient.getAdminInstructors()
-//       const payload = response?.data || response
+//       // Fetch instructors and courses simultaneously
+//       const [instructorRes, coursesRes] = await Promise.all([
+//         apiClient.getAdminInstructors().catch(() => null),
+//         apiClient.getCourses ? apiClient.getCourses().catch(() => []) : Promise.resolve([]),
+//       ])
+
+//       // Parse Instructors
+//       const payload = instructorRes?.data || instructorRes
 //       const list = Array.isArray(payload)
 //         ? payload
 //         : payload?.instructors || payload?.data || []
@@ -97,7 +115,7 @@
 //           name: ins.name || 'Faculty Member',
 //           email: ins.email || '',
 //           phone: ins.phone || '+234 800 000 0000',
-//           role: ins.role || 'Instructor',
+//           role: ins.role || ins.title || 'Senior Developer',
 //           assignedCourse:
 //             ins.assignedCourse || ins.specialty || 'General Engineering',
 //           specialty:
@@ -106,46 +124,51 @@
 //         }))
 //         setInstructors(formatted)
 //       } else {
-//         throw new Error('Empty instructor list returned')
-//       }
-//     } catch (err: any) {
-//       const saved = localStorage.getItem('denskill_admin_instructors')
-//       if (saved) {
-//         try {
-//           setInstructors(JSON.parse(saved))
-//         } catch (e) {
-//           // Ignore parse error
-//         }
-//       } else {
 //         setInstructors([
 //           {
-//             id: '1',
-//             name: 'Hilosthone Sulyman',
-//             email: 'hilosthone@denskill.org',
+//             id: '3',
+//             name: 'Soliu',
+//             email: 'hilosthones@gmail.com',
 //             phone: '+234 810 000 0000',
-//             role: 'Lead Full-Stack Instructor',
-//             specialty: 'Full Stack Development',
-//             rating: 5.0,
+//             role: 'Senior Developer',
+//             specialty: 'Full stack Engineer',
+//             assignedCourse: 'Full stack Engineer',
+//             rating: 4.9,
+//           },
+//           {
+//             id: '1',
+//             name: 'Hiosthone S.',
+//             email: 'hilosthone@gmail.com',
+//             phone: '+234 800 000 0000',
+//             role: 'Developer',
+//             specialty: 'Full stack',
+//             assignedCourse: 'Full stack',
+//             rating: 4.9,
 //           },
 //         ])
 //       }
+
+//       // Parse Courses for Assignment dropdown
+//       const coursePayload = coursesRes?.data || coursesRes
+//       const courseList = Array.isArray(coursePayload)
+//         ? coursePayload
+//         : coursePayload?.courses || coursePayload?.data || []
+//       setCourses(
+//         courseList.map((c: any) => ({
+//           id: String(c.id || c._id),
+//           title: c.title || c.name || 'Untitled Course',
+//         })),
+//       )
+//     } catch (err: any) {
+//       showAlert('Error', 'Failed to load directory data.', false)
 //     } finally {
 //       setIsLoading(false)
 //     }
 //   }
 
 //   useEffect(() => {
-//     fetchInstructors()
+//     fetchData()
 //   }, [])
-
-//   useEffect(() => {
-//     if (!isLoading) {
-//       localStorage.setItem(
-//         'denskill_admin_instructors',
-//         JSON.stringify(instructors),
-//       )
-//     }
-//   }, [instructors, isLoading])
 
 //   const handleOpenAddModal = () => {
 //     setEditingInstructor(null)
@@ -165,7 +188,7 @@
 //     setPhone(instructor.phone || '')
 //     setRole(instructor.role)
 //     setSpecialty(instructor.specialty || instructor.assignedCourse || '')
-//     setPassword('') // Password not required on update unless changing
+//     setPassword('')
 //     setIsModalOpen(true)
 //   }
 
@@ -181,11 +204,7 @@
 //           specialty: specialty || role,
 //           role,
 //         }
-//         try {
-//           await apiClient.updateInstructor(editingInstructor.id, payload)
-//         } catch (apiErr) {
-//           // Fallback local update
-//         }
+//         await apiClient.updateInstructor(editingInstructor.id, payload)
 //         setInstructors(
 //           instructors.map((ins) =>
 //             ins.id === editingInstructor.id
@@ -208,16 +227,11 @@
 //           email,
 //           specialty: specialty || role,
 //           role,
-//           password: password || 'TempPass123!', // Required by backend API for credential provisioning
+//           password: password || 'TempPass123!',
 //         }
 
-//         let newId = String(Date.now())
-//         try {
-//           const res = await apiClient.createInstructor(payload)
-//           if (res?.id || res?._id) newId = String(res.id || res._id)
-//         } catch (apiErr) {
-//           // Fallback local creation
-//         }
+//         const res = await apiClient.createInstructor(payload)
+//         const newId = String(res?.id || res?._id || Date.now())
 
 //         const newIns: Instructor = {
 //           id: newId,
@@ -238,10 +252,45 @@
 //       }
 
 //       setIsModalOpen(false)
+//       fetchData()
 //     } catch (err: any) {
 //       showAlert(
 //         'Error',
 //         err?.message || 'Failed to save instructor configuration.',
+//         false,
+//       )
+//     }
+//   }
+
+//   const handleAssignCourseSubmit = async (e: FormEvent) => {
+//     e.preventDefault()
+//     if (!assignModalInstructor || !selectedCourseId) return
+
+//     try {
+//       if (apiClient.assignTutor) {
+//         await apiClient.assignTutor(selectedCourseId, assignModalInstructor.id)
+//       }
+//       const matchedCourse = courses.find((c) => c.id === selectedCourseId)
+//       const courseName = matchedCourse ? matchedCourse.title : 'Assigned Track'
+
+//       setInstructors(
+//         instructors.map((ins) =>
+//           ins.id === assignModalInstructor.id
+//             ? { ...ins, assignedCourse: courseName, specialty: courseName }
+//             : ins,
+//         ),
+//       )
+//       showAlert(
+//         'Success',
+//         `Successfully assigned ${assignModalInstructor.name} to course.`,
+//         true,
+//       )
+//       setAssignModalInstructor(null)
+//       setSelectedCourseId('')
+//     } catch (err: any) {
+//       showAlert(
+//         'Error',
+//         err?.message || 'Failed to assign course to tutor.',
 //         false,
 //       )
 //     }
@@ -333,27 +382,96 @@
 //                   </div>
 //                   <div className='flex items-center gap-1.5 pt-1 text-dark dark:text-gray-300 font-medium'>
 //                     <BookOpen size={12} className='text-primary-purple' />{' '}
-//                     {instructor.specialty || instructor.assignedCourse}
+//                     <span className='truncate'>
+//                       Assigned: {instructor.specialty || instructor.assignedCourse || 'None'}
+//                     </span>
 //                   </div>
 //                 </div>
 //               </div>
 
-//               <div className='flex items-center gap-2 pt-4 border-t border-gray-100 dark:border-gray-800'>
+//               <div className='space-y-2 pt-4 border-t border-gray-100 dark:border-gray-800'>
 //                 <button
-//                   onClick={() => handleOpenEditModal(instructor)}
-//                   className='flex-1 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-300 flex items-center justify-center gap-1 transition cursor-pointer'
+//                   onClick={() => {
+//                     setAssignModalInstructor(instructor)
+//                     setSelectedCourseId('')
+//                   }}
+//                   className='w-full py-2 rounded-xl bg-primary-purple/10 hover:bg-primary-purple/20 text-xs font-semibold text-primary-purple flex items-center justify-center gap-1.5 transition cursor-pointer'
 //                 >
-//                   <Edit3 size={14} /> Edit
+//                   <LinkIcon size={14} /> Assign Course
 //                 </button>
-//                 <button
-//                   onClick={() => setDeleteModalId(instructor.id)}
-//                   className='px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-xs font-medium text-red-600 flex items-center justify-center gap-1 transition cursor-pointer'
-//                 >
-//                   <Trash2 size={14} />
-//                 </button>
+//                 <div className='flex items-center gap-2'>
+//                   <button
+//                     onClick={() => handleOpenEditModal(instructor)}
+//                     className='flex-1 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-300 flex items-center justify-center gap-1 transition cursor-pointer'
+//                   >
+//                     <Edit3 size={14} /> Edit
+//                   </button>
+//                   <button
+//                     onClick={() => setDeleteModalId(instructor.id)}
+//                     className='px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-xs font-medium text-red-600 flex items-center justify-center gap-1 transition cursor-pointer'
+//                   >
+//                     <Trash2 size={14} />
+//                   </button>
+//                 </div>
 //               </div>
 //             </div>
 //           ))}
+//         </div>
+//       )}
+
+//       {/* Assign Course Modal */}
+//       {assignModalInstructor && (
+//         <div className='fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn'>
+//           <div className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl'>
+//             <div className='flex justify-between items-center border-b pb-3 dark:border-gray-800'>
+//               <h3 className='text-base font-bold text-dark dark:text-white'>
+//                 Assign Course to {assignModalInstructor.name}
+//               </h3>
+//               <button
+//                 onClick={() => setAssignModalInstructor(null)}
+//                 className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer'
+//               >
+//                 <X size={18} />
+//               </button>
+//             </div>
+//             <form onSubmit={handleAssignCourseSubmit} className='space-y-4'>
+//               <div>
+//                 <label className='block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5'>
+//                   Select Course / Track
+//                 </label>
+//                 <select
+//                   required
+//                   className={inputClass}
+//                   value={selectedCourseId}
+//                   onChange={(e) => setSelectedCourseId(e.target.value)}
+//                 >
+//                   <option value='' disabled>
+//                     Choose a course...
+//                   </option>
+//                   {courses.map((c) => (
+//                     <option key={c.id} value={c.id}>
+//                       {c.title}
+//                     </option>
+//                   ))}
+//                 </select>
+//               </div>
+//               <div className='flex justify-end gap-2 pt-2'>
+//                 <button
+//                   type='button'
+//                   onClick={() => setAssignModalInstructor(null)}
+//                   className='px-4 py-2 rounded-xl text-xs font-semibold border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer'
+//                 >
+//                   Cancel
+//                 </button>
+//                 <button
+//                   type='submit'
+//                   className='px-5 py-2 rounded-xl text-xs font-semibold bg-primary-purple text-white hover:opacity-90 shadow-sm cursor-pointer'
+//                 >
+//                   Confirm Assignment
+//                 </button>
+//               </div>
+//             </form>
+//           </div>
 //         </div>
 //       )}
 
@@ -495,7 +613,7 @@
 //         </div>
 //       )}
 
-//       {/* Animated Confirmation Modal for Deletion */}
+//       {/* Delete Confirmation Modal */}
 //       {deleteModalId && (
 //         <div className='fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn'>
 //           <div className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl'>
@@ -527,7 +645,7 @@
 //         </div>
 //       )}
 
-//       {/* Animated Alert / Notification Modal */}
+//       {/* Alert Notification Modal */}
 //       {alertModal.isOpen && (
 //         <div className='fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn'>
 //           <div className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl'>
@@ -665,7 +783,7 @@ export default function AdminInstructorsPage() {
   const fetchData = async () => {
     setIsLoading(true)
     try {
-      // Fetch instructors and courses simultaneously
+      // Fetch instructors and courses simultaneously using the unified client
       const [instructorRes, coursesRes] = await Promise.all([
         apiClient.getAdminInstructors().catch(() => null),
         apiClient.getCourses ? apiClient.getCourses().catch(() => []) : Promise.resolve([]),
@@ -705,7 +823,7 @@ export default function AdminInstructorsPage() {
           },
           {
             id: '1',
-            name: 'Hiosthone S.',
+            name: 'Hilosthone S.',
             email: 'hilosthone@gmail.com',
             phone: '+234 800 000 0000',
             role: 'Developer',
@@ -869,7 +987,7 @@ export default function AdminInstructorsPage() {
     try {
       await apiClient.deleteInstructor(deleteModalId)
     } catch (apiErr) {
-      // Fallback local deletion
+      // Fallback local deletion if needed
     }
     setInstructors(instructors.filter((ins) => ins.id !== deleteModalId))
     setDeleteModalId(null)
