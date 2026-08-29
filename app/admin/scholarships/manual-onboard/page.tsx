@@ -298,11 +298,18 @@ interface Cohort {
   code: string
 }
 
+// Helper utility to auto-generate a clean manual payment reference
+const generatePaymentReference = () => {
+  const timestamp = Date.now()
+  const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase()
+  return `SCH-MAN-${timestamp}-${randomStr}`
+}
+
 export default function ManualScholarshipOnboardPage() {
   const [cohorts, setCohorts] = useState<Cohort[]>([])
   const [loadingCohorts, setLoadingCohorts] = useState(true)
 
-  // Form state updated to include manual amountPaid and paymentReference tracking
+  // Form state with auto-generated paymentReference initialized right away
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
@@ -313,7 +320,7 @@ export default function ManualScholarshipOnboardPage() {
     course: '',
     password: '',
     amountPaid: '',
-    paymentReference: '',
+    paymentReference: generatePaymentReference(),
   })
 
   const [submitting, setSubmitting] = useState(false)
@@ -361,6 +368,7 @@ export default function ManualScholarshipOnboardPage() {
 
       if (res.success || res.status === 'success' || res._id || res.id) {
         setSuccessMessage('Scholarship student successfully onboarded!')
+        // Reset form and generate a fresh payment reference for the next entry
         setFormData({
           firstName: '',
           middleName: '',
@@ -371,7 +379,7 @@ export default function ManualScholarshipOnboardPage() {
           course: '',
           password: '',
           amountPaid: '',
-          paymentReference: '',
+          paymentReference: generatePaymentReference(),
         })
       } else {
         setError(res.message || 'Failed to onboard scholarship student.')
@@ -554,17 +562,28 @@ export default function ManualScholarshipOnboardPage() {
               />
             </div>
             <div className='space-y-1'>
-              <label className='text-xs font-semibold uppercase text-gray-400'>
-                Payment Reference
-              </label>
+              <div className='flex justify-between items-center'>
+                <label className='text-xs font-semibold uppercase text-gray-400'>
+                  Payment Reference (Auto-Generated)
+                </label>
+                <button
+                  type='button'
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      paymentReference: generatePaymentReference(),
+                    })
+                  }
+                  className='text-xs text-primary-purple hover:underline font-medium'
+                >
+                  Regenerate
+                </button>
+              </div>
               <input
                 type='text'
-                placeholder='MANUAL_PAY_1_1719582000'
+                disabled
                 value={formData.paymentReference}
-                onChange={(e) =>
-                  setFormData({ ...formData, paymentReference: e.target.value })
-                }
-                className='w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-transparent text-sm focus:outline-none focus:border-primary-purple'
+                className='w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-500 dark:text-gray-400 cursor-not-allowed focus:outline-none'
               />
             </div>
           </div>
