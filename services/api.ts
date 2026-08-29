@@ -822,6 +822,8 @@ export const apiClient = {
     cohortId: string
     course?: string
     password?: string
+    amountPaid?: number
+    paymentReference?: string
   }) => {
     const res = await fetch(
       `${API_BASE_URL}/api/admin/scholarships/students/manual-onboard`,
