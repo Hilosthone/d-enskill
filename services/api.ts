@@ -621,6 +621,56 @@ export const apiClient = {
     return res.json()
   },
 
+// ==========================================
+// LEADERBOARD ENDPOINTS INTEGRATION
+// ==========================================
+
+/**
+ * Get global or course-specific student leaderboard ranked by percentage score.
+ * Supports optional course filtering, text search by student name, and pagination.
+ */
+
+  // Global or course-specific student leaderboard ranked by percentage score
+getLeaderboard: async (params?: {
+  courseId?: string
+  search?: string
+  page?: number
+  limit?: number
+}) => {
+  const queryParams = new URLSearchParams()
+  if (params?.courseId) queryParams.append('courseId', params.courseId)
+  if (params?.search) queryParams.append('search', params.search)
+  if (params?.page) queryParams.append('page', params.page.toString())
+  if (params?.limit) queryParams.append('limit', params.limit.toString())
+
+  const queryString = queryParams.toString() ? `?${queryParams.toString()}` : ''
+  const res = await fetch(`${API_BASE_URL}/api/leaderboard${queryString}`, {
+    method: 'GET',
+    headers: getAuthHeaders(),
+  })
+  return res.json()
+},
+
+// Get the authenticated student's current rank and percentage score
+getMyLeaderboardRank: async (courseId?: string) => {
+  const queryParam = courseId ? `?courseId=${encodeURIComponent(courseId)}` : ''
+  const res = await fetch(`${API_BASE_URL}/api/leaderboard/me${queryParam}`, {
+    method: 'GET',
+    headers: getAuthHeaders(),
+  })
+  return res.json()
+},
+
+// Get top 3 podium performers (Gold, Silver, Bronze) for dashboard display
+getLeaderboardPodium: async (courseId?: string) => {
+  const queryParam = courseId ? `?courseId=${encodeURIComponent(courseId)}` : ''
+  const res = await fetch(`${API_BASE_URL}/api/leaderboard/podium${queryParam}`, {
+    method: 'GET',
+    headers: getAuthHeaders(),
+  })
+  return res.json()
+},
+
   // ==========================================
   // 6. SCHOLARSHIP ENROLLMENT & AUTH
   // Public application portal, contribution payments, and offer claiming
