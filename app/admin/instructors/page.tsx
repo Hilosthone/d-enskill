@@ -54,7 +54,7 @@ const PROGRAMMES = [
 
 /**
  * AdminInstructorsPage Component
- * * Manages the live backend faculty roster, handles creating/updating instructor profiles,
+ * Manages the live backend faculty roster, handles creating/updating instructor profiles,
  * and mapping them to active academy program tracks using strict live backend APIs.
  */
 export default function AdminInstructorsPage() {
@@ -187,6 +187,7 @@ export default function AdminInstructorsPage() {
         const payload = {
           name,
           email,
+          phone,
           specialty: specialty || role,
           role,
         }
@@ -196,6 +197,7 @@ export default function AdminInstructorsPage() {
         const payload = {
           name,
           email,
+          phone,
           specialty: specialty || role,
           role,
           password: password || 'TempPass123!',
@@ -224,9 +226,9 @@ export default function AdminInstructorsPage() {
     if (!assignModalInstructor || !selectedCourseId) return
 
     try {
-      // Type-safe assignment update targeting the instructor specialty/assignedCourse payload
       await adminApiClient.updateInstructor(assignModalInstructor.id, {
         specialty: selectedCourseId,
+        assignedCourse: selectedCourseId,
       })
 
       showAlert(

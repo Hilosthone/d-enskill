@@ -248,6 +248,19 @@ export const adminApiClient = {
     return handleAdminApiResponse(res)
   },
 
+  // Assign a tutor to a course (PUT /api/admin/courses/{courseId}/assign-tutor)
+  assignTutorToCourse: async (courseId: string, tutorId: string | number) => {
+    const res = await fetch(`${API_BASE_URL}/api/admin/courses/${courseId}/assign-tutor`, {
+      method: 'PUT',
+      headers: {
+        ...getAdminAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ tutorId }),
+    })
+    return handleAdminApiResponse(res)
+  },
+
   getAdminReports: async () => {
     const res = await fetch(`${API_BASE_URL}/api/admin/reports`, {
       method: 'GET',
