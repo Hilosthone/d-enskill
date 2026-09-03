@@ -14,7 +14,8 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react'
-import { apiClient } from '@/services/api'
+// import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 function SignupForm() {
   const router = useRouter()
@@ -55,7 +56,7 @@ function SignupForm() {
   useEffect(() => {
     const fetchCohorts = async () => {
       try {
-        const res = await apiClient.getActiveScholarshipCohorts()
+        const res = await adminApiClient.()
         const list = Array.isArray(res) ? res : res?.cohorts || res?.data || []
         setCohorts(list)
 
@@ -99,7 +100,7 @@ function SignupForm() {
     }
 
     try {
-      const res = await apiClient.signupScholarship({
+      const res = await adminApiClient.signupScholarship({
         name: formData.name,
         email: formData.email,
         password: formData.password,
