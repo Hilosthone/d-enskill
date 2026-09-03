@@ -12,8 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import Link from 'next/link'
-// import { apiClient } from '@/services/api'
-import { adminApiClient } from '@/services/admin-api'
+import { apiClient } from '@/services/api'
 
 const AVAILABLE_COURSES = [
   'Frontend Development',
@@ -66,7 +65,7 @@ export default function ScholarshipApplyPage() {
   useEffect(() => {
     const fetchCohorts = async () => {
       try {
-        const res = await adminApiClient.getActiveScholarshipCohorts()
+        const res = await apiClient.getActiveScholarshipCohorts()
         const list = Array.isArray(res) ? res : res?.cohorts || res?.data || []
         setCohorts(list)
         if (list.length > 0) {
@@ -99,7 +98,7 @@ export default function ScholarshipApplyPage() {
     setErrorMsg(null)
 
     try {
-      const response = await adminApiClient.submitScholarshipApplication(formData)
+      const response = await apiClient.submitScholarshipApplication(formData)
       if (
         response &&
         (response.success || response.application || response.message)
