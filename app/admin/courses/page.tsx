@@ -16,7 +16,7 @@ import {
   Award,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 interface Course {
   id: string | number
@@ -64,8 +64,8 @@ export default function AdminCoursesPage() {
     setErrorMessage('')
     try {
       const [courseRes, instructorRes] = await Promise.all([
-        apiClient.getAdminCourses(),
-        apiClient.getAdminInstructors?.().catch(() => []),
+        adminApiClient.getAdminCourses(),
+        adminApiClient.getAdminInstructors?.().catch(() => []),
       ])
 
       const coursePayload = courseRes?.data || courseRes

@@ -10,7 +10,7 @@
 //   Loader2,
 //   AlertCircle,
 // } from 'lucide-react'
-// import { apiClient } from '@/services/api'
+// import { adminApiClient } from '@/services/api'
 
 // interface DashboardStats {
 //   totalStudents: number
@@ -43,7 +43,7 @@
 //   useEffect(() => {
 //     const fetchDashboardData = async () => {
 //       try {
-//         const response = await apiClient.getAdminDashboard()
+//         const response = await adminApiClient.getAdminDashboard()
 //         // Extract payload from Axios wrapper or direct response
 //         const payload = response?.data || response
 
@@ -252,7 +252,7 @@ import {
   ArrowUpRight,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 interface DashboardStats {
   totalStudents: number
@@ -289,7 +289,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await apiClient.getAdminDashboard()
+        const response = await adminApiClient.getAdminDashboard()
         const payload = response?.data || response
 
         if (payload) {

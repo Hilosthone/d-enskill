@@ -185,18 +185,12 @@ const adminNavItems = [
   },
   { label: 'Payments', href: '/admin/payments', icon: CreditCard },
   { label: 'Courses', href: '/admin/courses', icon: BookOpen },
-  { label: 'Question Banks', href: '/admin/question-banks', icon: HelpCircle },
   { label: 'Questions', href: '/admin/questions', icon: Code },
   { label: 'Leaderboard', href: '/admin/leaderboard', icon: Trophy },
   { label: 'Announcements', href: '/admin/announcements', icon: Bell },
   { label: 'Send Email', href: '/admin/emails', icon: Mail },
   { label: 'Instructors', href: '/admin/instructors', icon: GraduationCap },
   { label: 'Reports', href: '/admin/reports', icon: BarChart3 },
-  {
-    label: 'Grade Overrides',
-    href: '/admin/grades-override',
-    icon: ClipboardCheck,
-  },
   { label: 'Attendance Trends', href: '/admin/attendance', icon: UserCheck },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ]

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { UserCheck, Loader2, AlertCircle, Search, Calendar, UserX } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminadminApiClient } from '@/services/admin-api'
 
 export default function AttendanceOverviewPage() {
   const [courseId, setCourseId] = useState('')
@@ -18,7 +18,7 @@ export default function AttendanceOverviewPage() {
     setAttendanceData(null)
 
     try {
-      const res = await apiClient.getAdminAttendanceOverview(courseId)
+      const res = await adminApiClient.getAdminAttendanceOverview(courseId)
       if (res) {
         setAttendanceData(res)
       } else {

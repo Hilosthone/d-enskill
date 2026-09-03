@@ -2,7 +2,7 @@
 // 'use client'
 
 // import { useState, useEffect } from 'react'
-// import { apiClient } from '@/services/api'
+// import { adminApiClient } from '@/services/api'
 // import {
 //   Layers,
 //   Plus,
@@ -47,7 +47,7 @@
 //   const fetchCohorts = async () => {
 //     setLoading(true)
 //     try {
-//       const res = await apiClient.getScholarshipCohorts()
+//       const res = await adminApiClient.getScholarshipCohorts()
 //       if (res.success || Array.isArray(res.cohorts || res)) {
 //         setCohorts(res.cohorts || res)
 //       } else {
@@ -68,7 +68,7 @@
 //     e.preventDefault()
 //     setCreateLoading(true)
 //     try {
-//       const res = await apiClient.createScholarshipCohort(formData)
+//       const res = await adminApiClient.createScholarshipCohort(formData)
 //       if (res.success || res.status === 'success') {
 //         setIsCreateOpen(false)
 //         setFormData({
@@ -93,7 +93,7 @@
 //   const handleStatusToggle = async (id: string, currentStatus: string) => {
 //     const newStatus = currentStatus === 'active' ? 'closed' : 'active'
 //     try {
-//       const res = await apiClient.updateScholarshipCohortStatus(id, newStatus)
+//       const res = await adminApiClient.updateScholarshipCohortStatus(id, newStatus)
 //       if (res.success || res.status === 'success') {
 //         fetchCohorts()
 //       } else {
@@ -367,7 +367,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 import {
   Layers,
   Plus,
@@ -428,7 +428,7 @@ export default function ScholarshipCohortsPage() {
   const fetchCohorts = async () => {
     setLoading(true)
     try {
-      const res = await apiClient.getScholarshipCohorts()
+      const res = await adminApiClient.getScholarshipCohorts()
       if (res.success || Array.isArray(res.cohorts || res)) {
         setCohorts(res.cohorts || res)
       } else {
@@ -449,7 +449,7 @@ export default function ScholarshipCohortsPage() {
     e.preventDefault()
     setCreateLoading(true)
     try {
-      const res = await apiClient.createScholarshipCohort(formData)
+      const res = await adminApiClient.createScholarshipCohort(formData)
       if (res.success || res.status === 'success') {
         setIsCreateOpen(false)
         setFormData({
@@ -495,7 +495,7 @@ export default function ScholarshipCohortsPage() {
     if (!selectedCohortId) return
     setEditLoading(true)
     try {
-      const res = await apiClient.updateScholarshipCohort(
+      const res = await adminApiClient.updateScholarshipCohort(
         selectedCohortId,
         editFormData,
       )
@@ -516,7 +516,7 @@ export default function ScholarshipCohortsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this cohort?')) return
     try {
-      const res = await apiClient.deleteScholarshipCohort(id)
+      const res = await adminApiClient.deleteScholarshipCohort(id)
       if (res.success || res.status === 'success') {
         fetchCohorts()
       } else {
@@ -530,7 +530,7 @@ export default function ScholarshipCohortsPage() {
   const handleStatusToggle = async (id: string, currentStatus: string) => {
     const newStatus = currentStatus === 'active' ? 'closed' : 'active'
     try {
-      const res = await apiClient.updateScholarshipCohortStatus(id, newStatus)
+      const res = await adminApiClient.updateScholarshipCohortStatus(id, newStatus)
       if (res.success || res.status === 'success') {
         fetchCohorts()
       } else {

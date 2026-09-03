@@ -16,7 +16,7 @@ import {
   Check,
   Info,
 } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 interface Announcement {
   id: string | number
@@ -66,7 +66,7 @@ export default function AdminAnnouncementsPage() {
   const fetchAnnouncements = async () => {
     setIsFetching(true)
     try {
-      const response = await apiClient.getAdminAnnouncements()
+      const response = await adminApiClient.getAdminAnnouncements()
       const payload = response?.data || response
       const list = Array.isArray(payload)
         ? payload
@@ -118,7 +118,7 @@ export default function AdminAnnouncementsPage() {
     setIsLoading(true)
 
     try {
-      const response = await apiClient.createAnnouncement({
+      const response = await adminApiClient.createAnnouncement({
         title,
         content: message,
         message, // Supporting both backend field specifications
@@ -182,7 +182,7 @@ export default function AdminAnnouncementsPage() {
       'Are you sure you want to permanently delete this announcement? This action cannot be undone.',
       async () => {
         try {
-          await apiClient.deleteAnnouncement(id)
+          await adminApiClient.deleteAnnouncement(id)
           setAnnouncements(announcements.filter((a) => a.id !== id))
           showAlert(
             'success',

@@ -31,7 +31,7 @@
 //   }
 // }
 
-// const apiClient = {
+// const adminApiClient = {
 //   getAdminStudents: async () => {
 //     const res = await fetch(`${API_BASE_URL}/api/admin/students`, {
 //       method: 'GET',
@@ -84,7 +84,7 @@
 //     setIsLoading(true)
 //     setErrorMessage('')
 //     try {
-//       const response = await apiClient.getAdminStudents()
+//       const response = await adminApiClient.getAdminStudents()
 
 //       // Extract array correctly from { status: 'success', students: [...] }
 //       const payload = response?.data || response
@@ -130,7 +130,7 @@
 //   ) => {
 //     const newStatus = currentStatus === 'active' ? 'frozen' : 'active'
 //     try {
-//       await apiClient.updateStudentStatus(id, newStatus)
+//       await adminApiClient.updateStudentStatus(id, newStatus)
 //       setStudents((prev) =>
 //         prev.map((st) => (st.id === id ? { ...st, status: newStatus } : st)),
 //       )
@@ -146,7 +146,7 @@
 //       )
 //     ) {
 //       try {
-//         await apiClient.deleteStudent(id)
+//         await adminApiClient.deleteStudent(id)
 //         setStudents((prev) => prev.filter((st) => st.id !== id))
 //       } catch (err: any) {
 //         alert(err?.message || 'Failed to delete student record.')
@@ -337,7 +337,7 @@ import {
   Filter,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 interface Student {
   id: string | number
@@ -378,7 +378,7 @@ export default function AdminStudentsPage() {
     setIsLoading(true)
     setErrorMessage('')
     try {
-      const response = await apiClient.getAdminStudents(
+      const response = await adminApiClient.getAdminStudents(
         typeFilter !== 'ALL' ? { studentType: typeFilter as 'REGULAR' | 'SCHOLARSHIP' } : undefined
       )
 
@@ -431,7 +431,7 @@ export default function AdminStudentsPage() {
       onConfirm: async () => {
         try {
           // Wrapped id in Number() to satisfy API client's numeric id requirement
-          await apiClient.updateStudentStatus(Number(id), newStatus)
+          await adminApiClient.updateStudentStatus(Number(id), newStatus)
           setStudents((prev) =>
             prev.map((st) => (st.id === id ? { ...st, status: newStatus } : st)),
           )
@@ -457,7 +457,7 @@ export default function AdminStudentsPage() {
       onConfirm: async () => {
         try {
           // Wrapped id in Number() to satisfy API client's numeric id requirement
-          await apiClient.deleteStudent(Number(id))
+          await adminApiClient.deleteStudent(Number(id))
           setStudents((prev) => prev.filter((st) => st.id !== id))
           setAlertModal((prev) => ({ ...prev, isOpen: false }))
         } catch (err: any) {

@@ -18,7 +18,7 @@ import {
   Lock,
   Link as LinkIcon,
 } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 interface Instructor {
   id: string
@@ -107,8 +107,8 @@ export default function AdminInstructorsPage() {
     setIsLoading(true)
     try {
       const [instructorRes, coursesRes] = await Promise.all([
-        apiClient.getAdminInstructors(),
-        apiClient.getCourses ? apiClient.getCourses() : Promise.resolve([]),
+        adminApiClient.getAdminInstructors(),
+        adminApiClient.getCourses ? adminApiClient.getCourses() : Promise.resolve([]),
       ])
 
       // Parse Instructors
@@ -190,7 +190,7 @@ export default function AdminInstructorsPage() {
           specialty: specialty || role,
           role,
         }
-        await apiClient.updateInstructor(editingInstructor.id, payload)
+        await adminApiClient.updateInstructor(editingInstructor.id, payload)
         showAlert('Success', 'Faculty member updated successfully!', true)
       } else {
         const payload = {
@@ -200,7 +200,7 @@ export default function AdminInstructorsPage() {
           role,
           password: password || 'TempPass123!',
         }
-        await apiClient.createInstructor(payload)
+        await adminApiClient.createInstructor(payload)
         showAlert(
           'Success',
           'Instructor created successfully with login credentials.',
@@ -225,7 +225,7 @@ export default function AdminInstructorsPage() {
 
     try {
       // Type-safe assignment update targeting the instructor specialty/assignedCourse payload
-      await apiClient.updateInstructor(assignModalInstructor.id, {
+      await adminApiClient.updateInstructor(assignModalInstructor.id, {
         specialty: selectedCourseId,
       })
 
@@ -249,7 +249,7 @@ export default function AdminInstructorsPage() {
   const confirmDeleteInstructor = async () => {
     if (!deleteModalId) return
     try {
-      await apiClient.deleteInstructor(deleteModalId)
+      await adminApiClient.deleteInstructor(deleteModalId)
       setInstructors(instructors.filter((ins) => ins.id !== deleteModalId))
       showAlert('Deleted', 'Instructor removed from roster successfully.', true)
     } catch (err: any) {

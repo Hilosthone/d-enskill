@@ -13,7 +13,7 @@ import {
   Loader2,
   AlertCircle,
 } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 export default function AdminSettingsPage() {
   const [saved, setSaved] = useState(false)
@@ -33,7 +33,7 @@ export default function AdminSettingsPage() {
     setIsLoading(true)
     setErrorMessage('')
     try {
-      const response = await apiClient.getAdminSettings()
+      const response = await adminApiClient.getAdminSettings()
       const payload = response?.data || response || {}
       const settings = payload?.settings || payload
 
@@ -120,8 +120,8 @@ export default function AdminSettingsPage() {
     localStorage.setItem('denskill_email_alerts', emailAlerts.toString())
 
     try {
-      if (typeof (apiClient as any).updateAdminSettings === 'function') {
-        await (apiClient as any).updateAdminSettings({
+      if (typeof (adminApiClient as any).updateAdminSettings === 'function') {
+        await (adminApiClient as any).updateAdminSettings({
           platform: academyName,
           maintenanceMode,
           paystackKey,

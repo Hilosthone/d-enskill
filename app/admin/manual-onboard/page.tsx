@@ -2,7 +2,7 @@
 // import { useState, useEffect } from 'react'
 // import { useRouter } from 'next/navigation'
 // import { UserPlus, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
-// import { apiClient } from '@/services/api'
+// import { adminApiClient } from '@/services/api'
 
 // export default function ManualOnboardPage() {
 //   const router = useRouter()
@@ -71,7 +71,7 @@
 //     setSuccessMsg(null)
 
 //     try {
-//       const response = await apiClient.manualOnboardStudent(formData)
+//       const response = await adminApiClient.manualOnboardStudent(formData)
 //       if (response && (response.success || response.message || response.user)) {
 //         setSuccessMsg(
 //           response.message ||
@@ -329,7 +329,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 export default function ManualOnboardPage() {
   const router = useRouter()
@@ -401,7 +401,7 @@ export default function ManualOnboardPage() {
     setSuccessMsg(null)
 
     try {
-      const response = await apiClient.manualOnboardStudent(formData)
+      const response = await adminApiClient.manualOnboardStudent(formData)
       if (response && (response.success || response.message || response.user)) {
         const msg =
           response.message ||

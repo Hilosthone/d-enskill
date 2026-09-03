@@ -7,7 +7,7 @@ import {
   AlertCircle,
   ShieldAlert,
 } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 export default function GradeOverridePage() {
   const [gradeId, setGradeId] = useState('')
@@ -24,7 +24,7 @@ export default function GradeOverridePage() {
     setErrorMsg(null)
 
     try {
-      const res = await apiClient.executeGradeOverride(gradeId)
+      const res = await adminApiClient.executeGradeOverride(gradeId)
       if (res && (res.success || res.message)) {
         setSuccessMsg(`Grade override successfully executed for ID: ${gradeId}`)
         setGradeId('')

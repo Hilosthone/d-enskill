@@ -13,7 +13,7 @@ import {
   Award,
   CheckCircle2,
 } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 export default function AdminReportsPage() {
   const [reports, setReports] = useState<any>(null)
@@ -24,7 +24,7 @@ export default function AdminReportsPage() {
     setIsLoading(true)
     setErrorMessage('')
     try {
-      const response = await apiClient.getAdminReports()
+      const response = await adminApiClient.getAdminReports()
       const payload = response?.data || response
       setReports(payload?.reports || payload)
     } catch (err: any) {

@@ -1,3 +1,4 @@
+//src/constants/programmes.ts
 export const PROGRAMMES = [
   {
     title: 'Frontend Development',

@@ -2,7 +2,7 @@
 
 // import { useState } from 'react'
 // import { Mail, Send, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
-// import { apiClient } from '@/services/api'
+// import { adminApiClient } from '@/services/api'
 
 // export default function SendEmailPage() {
 //   const [formData, setFormData] = useState({
@@ -29,7 +29,7 @@
 //     setResponseMessage(null)
 
 //     try {
-//       const res = await apiClient.sendCustomEmail(formData)
+//       const res = await adminApiClient.sendCustomEmail(formData)
 
 //       if (res && res.success !== false) {
 //         setResponseMessage({
@@ -190,7 +190,7 @@ import {
   Trash2,
   UploadCloud,
 } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 interface AttachmentFile {
   name: string
@@ -337,7 +337,7 @@ export default function SendEmailPage() {
         }))
       }
 
-      const res = await apiClient.sendCustomEmail(payload)
+      const res = await adminApiClient.sendCustomEmail(payload)
 
       if (res && res.success !== false) {
         showAlert(

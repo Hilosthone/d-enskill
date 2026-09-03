@@ -16,7 +16,7 @@ import {
   RefreshCw,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 interface Payment {
   id: string
@@ -40,7 +40,7 @@ export default function AdminPaymentsPage() {
     setIsLoading(true)
     setErrorMessage('')
     try {
-      const response = await apiClient.getAdminPayments()
+      const response = await adminApiClient.getAdminPayments()
       const payload = response?.data || response
       const list = Array.isArray(payload)
         ? payload

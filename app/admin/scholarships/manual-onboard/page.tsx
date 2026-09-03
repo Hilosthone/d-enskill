@@ -1,7 +1,7 @@
 // 'use client'
 
 // import { useState, useEffect } from 'react'
-// import { apiClient } from '@/services/api'
+// import { adminApiClient } from '@/services/api'
 // import { UserPlus, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
 
 // interface Cohort {
@@ -35,7 +35,7 @@
 //   useEffect(() => {
 //     const fetchCohorts = async () => {
 //       try {
-//         const res = await apiClient.getScholarshipCohorts()
+//         const res = await adminApiClient.getScholarshipCohorts()
 //         if (res.success || Array.isArray(res.cohorts || res)) {
 //           setCohorts(res.cohorts || res)
 //         }
@@ -55,7 +55,7 @@
 //     setSuccessMessage('')
 
 //     try {
-//       const res = await apiClient.manualOnboardScholarshipStudent({
+//       const res = await adminApiClient.manualOnboardScholarshipStudent({
 //         firstName: formData.firstName,
 //         middleName: formData.middleName || undefined,
 //         lastName: formData.lastName,
@@ -272,7 +272,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 import { UserPlus, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
 
 // Course titles only list for the selection dropdown
@@ -331,7 +331,7 @@ export default function ManualScholarshipOnboardPage() {
   useEffect(() => {
     const fetchCohorts = async () => {
       try {
-        const res = await apiClient.getScholarshipCohorts()
+        const res = await adminApiClient.getScholarshipCohorts()
         if (res.success || Array.isArray(res.cohorts || res)) {
           setCohorts(res.cohorts || res)
         }
@@ -351,7 +351,7 @@ export default function ManualScholarshipOnboardPage() {
     setSuccessMessage('')
 
     try {
-      const res = await apiClient.manualOnboardScholarshipStudent({
+      const res = await adminApiClient.manualOnboardScholarshipStudent({
         firstName: formData.firstName,
         middleName: formData.middleName || undefined,
         lastName: formData.lastName,

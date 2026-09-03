@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 import {
   Award,
   Search,
@@ -106,23 +106,23 @@ export default function ScholarshipApplicationsPage() {
 
       switch (selectedStatus) {
         case 'pending':
-          appRes = await apiClient.getPendingScholarshipApplications(selectedCohort || undefined)
+          appRes = await adminApiClient.getPendingScholarshipApplications(selectedCohort || undefined)
           break
         case 'awaiting-payment':
-          appRes = await apiClient.getAwaitingPaymentScholarshipApplications(selectedCohort || undefined)
+          appRes = await adminApiClient.getAwaitingPaymentScholarshipApplications(selectedCohort || undefined)
           break
         case 'paid':
-          appRes = await apiClient.getPaidScholarshipStudents(selectedCohort || undefined)
+          appRes = await adminApiClient.getPaidScholarshipStudents(selectedCohort || undefined)
           break
         default:
-          appRes = await apiClient.getScholarshipApplications({
+          appRes = await adminApiClient.getScholarshipApplications({
             cohortId: selectedCohort || undefined,
             status: selectedStatus === 'all' ? undefined : selectedStatus,
           })
           break
       }
 
-      const cohortRes = await apiClient.getScholarshipCohorts()
+      const cohortRes = await adminApiClient.getScholarshipCohorts()
 
       const appsList = Array.isArray(appRes)
         ? appRes
@@ -195,9 +195,9 @@ export default function ScholarshipApplicationsPage() {
     try {
       let res: any
       if (actionType === 'approve') {
-        res = await apiClient.approveScholarshipApplication(appId, { adminNotes })
+        res = await adminApiClient.approveScholarshipApplication(appId, { adminNotes })
       } else {
-        res = await apiClient.rejectScholarshipApplication(appId, { adminNotes })
+        res = await adminApiClient.rejectScholarshipApplication(appId, { adminNotes })
       }
 
       if (res?.success || res?.status === 'success') {
@@ -229,8 +229,8 @@ export default function ScholarshipApplicationsPage() {
       await Promise.all(
         selectedIds.map((id) =>
           type === 'approve'
-            ? apiClient.approveScholarshipApplication(id, {})
-            : apiClient.rejectScholarshipApplication(id, {})
+            ? adminApiClient.approveScholarshipApplication(id, {})
+            : adminApiClient.rejectScholarshipApplication(id, {})
         )
       )
       showAlert(
