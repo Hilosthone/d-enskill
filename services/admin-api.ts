@@ -834,4 +834,51 @@ export const adminApiClient = {
     })
     return handleAdminApiResponse(res)
   },
+
+  // ==========================================
+  // Leaderboard Service Methods
+  // ==========================================
+
+  /**
+   * Retrieves the global or course-specific student leaderboard ranked by percentage score.
+   * Supports optional filtering by course, keyword search on student names, and pagination.
+   */
+  getLeaderboard: async (params?: { courseId?: string; search?: string; page?: number; limit?: number }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.courseId) queryParams.append('courseId', params.courseId)
+    if (params?.search) queryParams.append('search', params.search)
+    if (params?.page) queryParams.append('page', params.page.toString())
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : ''
+    const res = await fetch(`${API_BASE_URL}/api/leaderboard${queryString}`, {
+      method: 'GET',
+      headers: getAdminAuthHeaders(),
+    })
+    return handleAdminApiResponse(res)
+  },
+
+  /**
+   * Retrieves the authenticated student's current rank, score, and performance context.
+   */
+  getMyRanking: async (courseId?: string) => {
+    const queryParams = courseId ? `?courseId=${encodeURIComponent(courseId)}` : ''
+    const res = await fetch(`${API_BASE_URL}/api/leaderboard/me${queryParams}`, {
+      method: 'GET',
+      headers: getAdminAuthHeaders(),
+    })
+    return handleAdminApiResponse(res)
+  },
+
+  /**
+   * Retrieves the top 3 podium performers (Gold, Silver, Bronze) optimized for dashboard UI widgets.
+   */
+  getPodium: async (courseId?: string) => {
+    const queryParams = courseId ? `?courseId=${encodeURIComponent(courseId)}` : ''
+    const res = await fetch(`${API_BASE_URL}/api/leaderboard/podium${queryParams}`, {
+      method: 'GET',
+      headers: getAdminAuthHeaders(),
+    })
+    return handleAdminApiResponse(res)
+  },
 }
