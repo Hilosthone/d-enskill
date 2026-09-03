@@ -228,7 +228,7 @@ export default function AdminInstructorsPage() {
     try {
       await adminApiClient.updateInstructor(assignModalInstructor.id, {
         specialty: selectedCourseId,
-        assignedCourse: selectedCourseId,
+        // assignedCourse: selectedCourseId,
       })
 
       showAlert(
