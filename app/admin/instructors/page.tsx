@@ -108,7 +108,7 @@ export default function AdminInstructorsPage() {
     try {
       const [instructorRes, coursesRes] = await Promise.all([
         adminApiClient.getAdminInstructors(),
-        adminApiClient.getCourses ? adminApiClient.getCourses() : Promise.resolve([]),
+        (adminApiClient as any).getCourses ? (adminApiClient as any).getCourses() : Promise.resolve([]),
       ])
 
       // Parse Instructors
