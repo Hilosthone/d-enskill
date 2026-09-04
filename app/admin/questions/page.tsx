@@ -288,7 +288,8 @@ export default function QuestionsManagementPage() {
               const startTimeVal = bank.startTime || bank.start_time
               const expiresVal = bank.expiresAt || bank.expires_at
               const statusVal = bank.status || 'DRAFT'
-              const attemptsVal = bank.maxAttempts ?? bank.max_attempts ?? bank.attempts ?? bank.allowedAttempts ?? bank.allowed_attempts ?? 1
+              // const attemptsVal = bank.maxAttempts ?? bank.max_attempts ?? bank.attempts ?? bank.allowedAttempts ?? bank.allowed_attempts ?? 1
+              const attemptsVal = bank.maxAttempts ?? bank.max_attempts ?? (bank as any).attempts ?? bank.allowedAttempts ?? (bank as any).allowed_attempts ?? 1
 
               return (
                 <div key={bank.id} className="group relative flex flex-col justify-between bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm hover:shadow-md transition-all">
