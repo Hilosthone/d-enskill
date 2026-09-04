@@ -287,7 +287,8 @@
 
 
 
-// app/student/quizzes/page.tsx
+
+//app/student/quizzes/page.tsx
 // app/student/quizzes/page.tsx
 'use client'
 
@@ -320,28 +321,70 @@ export default function StudentQuizzesPage() {
     fetchQuizzes()
   }, [selectedCourse, searchQuery])
 
-  // Retrieves available quizzes from backend and syncs local localStorage attempt history
+  /**
+   * Fetches the list of approved question banks and enriches each one 
+   * with real question counts and durations using individual API calls 
+   * if the list endpoint omits them.
+   */
   const fetchQuizzes = async () => {
     try {
-      // Only show the heavy loading spinner if we don't have data yet 
-      // to prevent flashing or clearing content during background re-fetches
       if (questionBanks.length === 0) {
         setLoading(true)
       }
       setError(null)
 
-      // Fetch approved question banks for students based on active filters
+      // 1. Fetch the raw list from the backend
       const response = await apiClient.getQuestionBanks({
         status: 'APPROVED',
         search: searchQuery || undefined,
         courseId: selectedCourse !== 'ALL' ? selectedCourse : undefined,
       })
 
-      const data = Array.isArray(response) ? response : response?.data || response?.questionBanks || []
+      const rawData = Array.isArray(response) ? response : response?.data || response?.questionBanks || []
       
-      // Safety guard: Prevent blanking out the screen if a background fetch returns empty unexpectedly
-      if (data.length > 0 || isInitialMount) {
-        setQuestionBanks(data as QuestionBank[])
+      // 2. Enrich each question bank with real data (Question Count & Duration)
+      // This prevents '0 Questions' by querying the questions API or individual bank details for each item.
+      const enrichedBanks = await Promise.all(
+        rawData.map(async (bank: any) => {
+          let realQuestionCount = bank.questionCount || bank.question_count || bank.totalQuestions || 0
+          let realDuration = bank.durationMinutes || bank.duration_minutes || bank.duration || bank.timeLimit || null
+          let fetchedQuestions = bank.questions || []
+
+          // If the list endpoint didn't include questions or count, fetch them explicitly
+          if (!realQuestionCount || realQuestionCount === 0 || !fetchedQuestions.length) {
+            try {
+              // Try fetching full details via getQuestionBankById
+              const detailedBank = await apiClient.getQuestionBankById(bank.id)
+              if (detailedBank) {
+                fetchedQuestions = detailedBank.questions || detailedBank.data?.questions || []
+                realQuestionCount = detailedBank.questionCount || detailedBank.question_count || fetchedQuestions.length || realQuestionCount
+                realDuration = realDuration || detailedBank.durationMinutes || detailedBank.duration_minutes || detailedBank.duration || detailedBank.timeLimit
+              }
+            } catch (err) {
+              // Fallback: try fetching questions directly by question_bank_id
+              try {
+                const qRes = await apiClient.getQuestions({ question_bank_id: bank.id })
+                const qList = Array.isArray(qRes) ? qRes : qRes?.data || qRes?.questions || []
+                realQuestionCount = qList.length
+                fetchedQuestions = qList
+              } catch (innerErr) {
+                console.error(`Could not fetch questions for bank ${bank.id}`, innerErr)
+              }
+            }
+          }
+
+          return {
+            ...bank,
+            questions: fetchedQuestions,
+            questionCount: realQuestionCount,
+            // If duration is missing entirely from backend, calculate estimate (e.g. 2 mins per question) or set null
+            resolvedDuration: realDuration || (realQuestionCount > 0 ? realQuestionCount * 2 : null)
+          }
+        })
+      )
+      
+      if (enrichedBanks.length > 0 || isInitialMount) {
+        setQuestionBanks(enrichedBanks)
         setIsInitialMount(false)
       }
 
@@ -457,13 +500,13 @@ export default function StudentQuizzesPage() {
 
             const expiryDateStr = b.expires_at || b.dueDate || b.closeDate
             const isExpired = expiryDateStr ? new Date(expiryDateStr).getTime() < Date.now() : false
-
             const isLocked = isLimitExceeded || isExpired
 
-            const rawQuestionCount = b.questionCount || b.questions?.length || b.totalQuestions || 0
-            const questionCount = typeof rawQuestionCount === 'number' ? rawQuestionCount : (parseInt(rawQuestionCount, 10) || 'Multiple')
+            // Real question count computed via enrichment
+            const questionCount = b.questionCount ?? (Array.isArray(b.questions) ? b.questions.length : 0)
 
-            const durationMinutes = b.durationMinutes || b.duration || (b.durationSeconds ? Math.ceil(b.durationSeconds / 60) : null)
+            // Real duration computed via enrichment or fallback estimation
+            const durationMinutes = b.resolvedDuration
 
             return (
               <motion.div
@@ -509,7 +552,7 @@ export default function StudentQuizzesPage() {
                   <div className='flex items-center gap-4 pt-2 text-xs font-medium text-gray-600 dark:text-gray-300'>
                     <span className='flex items-center gap-1.5'>
                       <CheckCircle2 size={15} className='text-emerald-500' />
-                      {questionCount} Questions
+                      {questionCount} {questionCount === 1 ? 'Question' : 'Questions'}
                     </span>
                     {durationMinutes && (
                       <span className='flex items-center gap-1.5'>
@@ -659,9 +702,8 @@ export default function StudentQuizzesPage() {
 
               {/* Modal Scrollable Content (Questions Breakdown) */}
               <div className='p-6 overflow-y-auto space-y-6 flex-1'>
-                {selectedAttempt.answers && selectedAttempt.answers.length > 0 ? (
+                {Array.isArray(selectedAttempt.answers) && selectedAttempt.answers.length > 0 ? (
                   selectedAttempt.answers.map((ans: any, qIdx: number) => {
-                    // Fully resolved fallback logic with strict comparison (===)
                     const isCorrect = ans.isCorrect ?? (ans.selectedOption === ans.correctAnswer)
 
                     return (
