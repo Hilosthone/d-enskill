@@ -4,7 +4,7 @@ import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, ShieldCheck } from 'lucide-react'
-import { apiClient } from '@/services/api'
+import { adminApiClient } from '@/services/admin-api'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -20,7 +20,7 @@ const handleAdminLogin = async (e: FormEvent) => {
   setIsLoading(true)
 
   try {
-    const response = await apiClient.adminLogin({ email, password })
+    const response = await adminApiClient.adminLogin({ email, password })
 
     // Check if response indicates success or contains a token
     const token = response.token || response.accessToken
