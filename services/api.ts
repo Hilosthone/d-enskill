@@ -174,151 +174,6 @@ export const apiClient = {
     return res.json()
   },
 
-  // // ==========================================
-  // // 3. STUDENT PORTAL DASHBOARD
-  // // Endpoints for retrieving enrolled courses, progress, and profiles
-  // // ==========================================
-  // getDashboardOverview: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/overview`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-  //   return res.json()
-  // },
-
-  // getStudentProfile: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/profile`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-  //   return res.json()
-  // },
-
-  // getCourses: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/courses`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-  //   return res.json()
-  // },
-
-  // getPayments: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/payments`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-  //   return res.json()
-  // },
-
-  // getAnnouncements: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/announcements`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-
-  //   const data = await res.json()
-
-  //   // If the server returns an error status (e.g., 401, 500), throw it so the catch block handles it
-  //   if (!res.ok) {
-  //     throw new Error(data.message || 'Failed to fetch announcements')
-  //   }
-
-  //   return data
-  // },
-
-  // getReceipts: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/receipts`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-  //   return res.json()
-  // },
-
-  // getScholarshipProfile: async () => {
-  //   const res = await fetch(
-  //     `${API_BASE_URL}/api/dashboard/scholarship/profile`,
-  //     {
-  //       method: 'GET',
-  //       headers: getAuthHeaders(),
-  //     },
-  //   )
-  //   return res.json()
-  // },
-
-  // verifyStudentScholarshipPayment: async (data: {
-  //   paymentReference: string
-  //   transactionId: string
-  // }) => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/payment/verify`, {
-  //     method: 'POST',
-  //     headers: getAuthHeaders(),
-  //     body: JSON.stringify(data),
-  //   })
-  //   return res.json()
-  // },
-
-  // getGrades: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/grades`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-  //   return res.json()
-  // },
-
-  // getCommunityPosts: async () => {
-  //   const res = await fetch(`${API_BASE_URL}/api/dashboard/community`, {
-  //     method: 'GET',
-  //     headers: getAuthHeaders(),
-  //   })
-  //   return res.json()
-  // },
-
-  // fetchCourseModules: async (courseId: string) => {
-  //   const res = await fetch(
-  //     `${API_BASE_URL}/api/dashboard/modules/${courseId}`,
-  //     {
-  //       method: 'GET',
-  //       headers: getAuthHeaders(),
-  //     },
-  //   )
-  //   return res.json()
-  // },
-
-  // getCourseSessions: async (courseId: string) => {
-  //   const res = await fetch(
-  //     `${API_BASE_URL}/api/dashboard/sessions/${courseId}`,
-  //     {
-  //       method: 'GET',
-  //       headers: getAuthHeaders(),
-  //     },
-  //   )
-  //   return res.json()
-  // },
-
-  // fetchCourseAssessments: async (courseId: string) => {
-  //   const res = await fetch(
-  //     `${API_BASE_URL}/api/dashboard/assessments/${courseId}`,
-  //     {
-  //       method: 'GET',
-  //       headers: getAuthHeaders(),
-  //     },
-  //   )
-  //   return res.json()
-  // },
-
-  // submitAssessment: async (assessmentId: number | string, content: string) => {
-  //   const res = await fetch(
-  //     `${API_BASE_URL}/api/dashboard/assessments/${assessmentId}/submit`,
-  //     {
-  //       method: 'POST',
-  //       headers: getAuthHeaders(),
-  //       body: JSON.stringify({ content }),
-  //     },
-  //   )
-  //   return res.json()
-  // },
-
-
   // ==========================================
   // 3. STUDENT PORTAL DASHBOARD & QUESTION BANKS
   // Endpoints for retrieving enrolled courses, progress, profiles, question banks, and questions
@@ -521,6 +376,50 @@ export const apiClient = {
         body: JSON.stringify({ content }),
       },
     )
+    return res.json()
+  },
+
+  getLeaderboard: async (params?: {
+    courseId?: string
+    search?: string
+    page?: number
+    limit?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.courseId) queryParams.append('courseId', params.courseId)
+    if (params?.search) queryParams.append('search', params.search)
+    if (params?.page) queryParams.append('page', String(params.page))
+    if (params?.limit) queryParams.append('limit', String(params.limit))
+
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : ''
+    const res = await fetch(`${API_BASE_URL}/api/leaderboard${queryString}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+    return res.json()
+  },
+
+  getLeaderboardMe: async (params?: { courseId?: string }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.courseId) queryParams.append('courseId', params.courseId)
+
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : ''
+    const res = await fetch(`${API_BASE_URL}/api/leaderboard/me${queryString}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+    return res.json()
+  },
+
+  getLeaderboardPodium: async (params?: { courseId?: string }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.courseId) queryParams.append('courseId', params.courseId)
+
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : ''
+    const res = await fetch(`${API_BASE_URL}/api/leaderboard/podium${queryString}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
     return res.json()
   },
 

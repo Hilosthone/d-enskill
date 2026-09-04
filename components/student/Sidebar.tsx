@@ -103,6 +103,7 @@ import {
   User,
   LogOut,
   FileQuestion,
+  Trophy,
 } from 'lucide-react'
 import { apiClient } from '@/services/api'
 
@@ -137,6 +138,7 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
     { name: 'Payments', href: '/student/payments', icon: CreditCard },
     { name: 'My Courses', href: '/student/courses', icon: BookOpen },
     { name: 'Quizzes', href: '/student/quizzes', icon: FileQuestion },
+    { name: 'Leaderboard', href: '/student/leaderboard', icon: Trophy },
     { name: 'Announcements', href: '/student/announcements', icon: Bell },
     // { name: 'Community', href: '/student/community', icon: MessageSquare },
     { name: 'Receipts', href: '/student/receipts', icon: Receipt },
